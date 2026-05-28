@@ -38,11 +38,20 @@ Sau đó mở file `.env` và điền thông tin database:
 - `DB_USERNAME` = tên tài khoản MySQL (thường là `root`)
 - `DB_PASSWORD` = mật khẩu MySQL (để trống nếu dùng Laragon)
 
-**Bước 4: Tạo bảng dữ liệu và dữ liệu mẫu**
+**Bước 4: Import dữ liệu mẫu của nhóm**
 
-```
-php artisan migrate --seed
-```
+Thay vì chạy seeder ngẫu nhiên, hãy import thẳng file database của nhóm để dùng đúng tài khoản và công việc đã có sẵn:
+
+1. Mở **phpMyAdmin** tại địa chỉ: `http://localhost/phpmyadmin`
+2. Tạo một database mới tên là `taskflow`
+3. Chọn database `taskflow` vừa tạo
+4. Bấm tab **Import** (Nhập)
+5. Chọn file `database/taskflow_backup.sql` trong thư mục project
+6. Bấm **Go** (hoặc **Thực hiện**) để import
+
+Sau khi import xong, bạn đã có đầy đủ tài khoản và 20 công việc mẫu của nhóm.
+
+> Lưu ý: Nếu đã tạo database rồi thì bỏ qua bước 1-2, chỉ cần vào Import trực tiếp.
 
 **Bước 5: Khởi động ứng dụng**
 
