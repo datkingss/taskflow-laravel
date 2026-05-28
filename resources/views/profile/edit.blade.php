@@ -1,27 +1,30 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
-        </h2>
+        Cài đặt Hồ sơ cá nhân
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
+    <div class="container-fluid">
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-8">
+                <!-- Update Profile Info Card -->
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-body p-4 p-sm-5">
+                        @include('profile.partials.update-profile-information-form')
+                    </div>
                 </div>
-            </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
+                <!-- Update Password Card -->
+                <div class="card shadow-sm border-0 rounded-3 mb-4">
+                    <div class="card-body p-4 p-sm-5">
+                        @include('profile.partials.update-password-form')
+                    </div>
                 </div>
-            </div>
 
-            <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
+                <!-- Delete User Card -->
+                <div class="card shadow-sm border border-danger border-opacity-10 rounded-3">
+                    <div class="card-body p-4 p-sm-5">
+                        @include('profile.partials.delete-user-form')
+                    </div>
                 </div>
             </div>
         </div>

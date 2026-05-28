@@ -31,9 +31,21 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', 'min:8'],
+        ], [
+            'name.required' => 'Họ và tên bắt buộc phải nhập.',
+            'name.string' => 'Họ và tên phải là chuỗi chữ.',
+            'name.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+            'name.regex' => 'Họ và tên phải là chuỗi chữ (chỉ bao gồm chữ cái và khoảng trắng).',
+            'email.required' => 'Email bắt buộc phải nhập.',
+            'email.email' => 'Email phải đúng định dạng thư điện tử (email@example.com).',
+            'email.unique' => 'Email đã tồn tại trong database (không được đăng ký trùng email đã có trong database).',
+            'email.max' => 'Email không được vượt quá 255 ký tự.',
+            'password.required' => 'Mật khẩu bắt buộc phải nhập.',
+            'password.min' => 'Mật khẩu phải tối thiểu 8 ký tự.',
+            'password.confirmed' => 'Mật khẩu phải khớp hoàn toàn với ô "Xác nhận mật khẩu".',
         ]);
 
         $user = User::create([

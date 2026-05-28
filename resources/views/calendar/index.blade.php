@@ -3,12 +3,13 @@
         Lịch công việc
     </x-slot>
 
-    <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-            <div id="calendar" class="min-h-[650px] text-gray-800"></div>
+    <div class="container-fluid">
+        <div class="card shadow-sm border-0 rounded-3 p-4">
+            <div id="calendar" class="min-h-[650px] text-dark"></div>
         </div>
     </div>
 
+    <!-- FullCalendar CSS and JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
     <script>
@@ -22,7 +23,6 @@
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    // Đã thay đổi: Dùng dayGridWeek thay vì timeGridWeek để bỏ chia khung giờ
                     right: 'dayGridMonth,dayGridWeek,listMonth'
                 },
                 buttonText: {
@@ -32,9 +32,7 @@
                     list: 'Danh sách'
                 },
                 
-                // Thêm dòng này: Ẩn luôn chữ "08:00" hiển thị trên tên công việc cho gọn
                 displayEventTime: false, 
-
                 events: @json($events), 
 
                 eventClick: function(info) {
@@ -46,6 +44,7 @@
                         due_date: info.event.startStr
                     };
 
+                    // Trigger the global window listener registered in task-modals component
                     window.dispatchEvent(new CustomEvent('open-edit-modal', { detail: taskData }));
                 }
             });

@@ -25,6 +25,9 @@ Route::middleware('auth')->group(function () {
     // Route cập nhật công việc
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
 
+    // Route xóa tất cả công việc theo trạng thái
+    Route::delete('/tasks/clear-status', [TaskController::class, 'clearStatus'])->name('tasks.clearStatus');
+
     // Route xóa công việc
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
     // Route xem toàn bộ bảng Kanban
@@ -48,6 +51,12 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/export', [ReportController::class, 'exportCsv'])->name('reports.export');
+
+    // Các routes dành riêng cho Quản trị viên (Admin)
+    Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/users', [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('users.index');
+        Route::delete('/users/{user}', [\App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('users.destroy');
+    });
     });
     
 require __DIR__.'/auth.php';

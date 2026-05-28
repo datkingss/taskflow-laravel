@@ -10,20 +10,33 @@ use App\Notifications\ReportNotification;
 class ReportController extends Controller
 {
     // 1. Hiển thị trang Báo cáo
-    public function index()
+    public function index(Request $request)
     {
-        // Lấy tất cả task do người dùng hiện tại tạo ra
-        $tasks = Task::where('created_by', Auth::id())->latest()->get();
+        $search = $request->input('search');
+        $query = Task::where('created_by', Auth::id());
+
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Lấy tất cả task của user để tính toán số liệu tĩnh đầy đủ
+        $allTasks = Task::where('created_by', Auth::id())->get();
         
         // Tính toán số liệu tổng quan
         $stats = [
-            'total' => $tasks->count(),
-            'completed' => $tasks->where('status', 'completed')->count(),
-            'in_progress' => $tasks->where('status', 'in_progress')->count(),
-            'pending' => $tasks->where('status', 'pending')->count(),
+            'total' => $allTasks->count(),
+            'completed' => $allTasks->where('status', 'completed')->count(),
+            'in_progress' => $allTasks->where('status', 'in_progress')->count(),
+            'pending' => $allTasks->where('status', 'pending')->count(),
         ];
 
-        return view('reports.index', compact('tasks', 'stats'));
+        // Phân trang danh sách công việc (10 task trên 1 trang)
+        $tasks = $query->latest()->paginate(10)->withQueryString();
+
+        return view('reports.index', compact('tasks', 'stats', 'search'));
     }
 
     // 2. Chức năng Xuất file CSV (Đọc được bằng Excel)

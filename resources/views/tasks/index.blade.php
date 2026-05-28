@@ -1,86 +1,190 @@
-<x-app-layout>
+    <x-app-layout>
     <x-slot name="header">
         Quản lý công việc (Kanban Board)
     </x-slot>
 
-    <div class="max-w-[95%] mx-auto h-[calc(100vh-140px)] flex flex-col py-6">
-        
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Tất cả công việc</h2>
-            <button @click="$dispatch('open-modal', 'create-task')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm">
-                + Thêm công việc
-            </button>
+    <div class="container-fluid">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+            <h4 class="fw-bold text-dark mb-0">Tất cả công việc</h4>
+            
+            <!-- Search and Action Buttons -->
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <form action="{{ route('tasks.index') }}" method="GET" class="d-flex" style="max-width: 320px;">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0">
+                            <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                        </span>
+                        <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm kiếm task..." value="{{ $search ?? '' }}">
+                        @if($search)
+                            <a href="{{ route('tasks.index') }}" class="btn btn-outline-secondary d-flex align-items-center">
+                                <i class="fa-solid fa-xmark"></i>
+                            </a>
+                        @endif
+                        <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Tìm</button>
+                    </div>
+                </form>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTaskModal" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
+                    <i class="fa-solid fa-plus me-1"></i> Thêm công việc
+                </button>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 min-h-0">
-            
-            <div class="bg-gray-100/70 rounded-xl p-4 border border-gray-200 flex flex-col h-full">
-                <div class="flex items-center mb-4 pb-2 border-b border-gray-200 shrink-0">
-                    <div class="w-3 h-3 rounded-full bg-gray-400 mr-3"></div>
-                    <h4 class="font-bold text-gray-700 text-base flex-1">Chờ xử lý</h4>
-                    <span class="bg-gray-200 text-gray-600 text-xs font-bold px-2.5 py-1 rounded-full">{{ $pendingTasks->count() }}</span>
-                </div>
-                <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
-                    @forelse($pendingTasks as $task)
-                    <div x-data='{ taskData: @json($task) }' @click="$dispatch('open-edit-modal', taskData)" class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 cursor-pointer hover:border-indigo-400 hover:shadow-md transition-all">
-                        <h5 class="text-sm font-semibold text-gray-800 mb-3">{{ $task->title }}</h5>
-                        <div class="flex justify-between items-center text-xs font-medium mt-4">
-                            <span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md">Task</span>
-                            <span class="text-gray-500 flex items-center">
-                                <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Chưa có' }}
-                            </span>
+        <div class="row g-4">
+            <!-- Pending Column -->
+            <div class="col-md-4">
+                <div class="card bg-light border-0 shadow-sm rounded-3 h-100">
+                    <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 pb-0 px-3">
+                        <div class="d-flex align-items-center">
+                            <span class="rounded-circle bg-secondary me-2" style="width: 10px; height: 10px; display: inline-block;"></span>
+                            <h6 class="fw-bold text-muted mb-0 small text-uppercase">Chờ xử lý</h6>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            @if($pendingTasks->count() > 0)
+                                <form action="{{ route('tasks.clearStatus') }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa toàn bộ công việc trong cột Chờ xử lý?');" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="status" value="pending">
+                                    <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa tất cả trong cột này">
+                                        <i class="fa-solid fa-trash-can fs-6"></i>
+                                    </button>
+                                </form>
+                            @endif
+                            <span class="badge bg-secondary rounded-pill">{{ $pendingTasks->count() }}</span>
                         </div>
                     </div>
-                    @empty
-                    <div class="text-center text-sm text-gray-400 py-8 border-2 border-dashed border-gray-200 rounded-lg">Chưa có công việc nào</div>
-                    @endforelse
+                    <div class="card-body p-3 overflow-y-auto" style="max-height: 600px;">
+                        @forelse($pendingTasks as $task)
+                            <div class="card border-0 shadow-sm p-3 mb-3 cursor-pointer bg-white" 
+                                 onclick="openEditTaskModal({{ json_encode($task) }})" style="transition: transform 0.2s;">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                    <h6 class="mb-0 text-dark fw-semibold" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
+                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');" class="d-inline" onclick="event.stopPropagation();">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa công việc">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="badge bg-primary-subtle text-primary" style="font-size: 0.65rem;">Task</span>
+                                    <span class="text-muted" style="font-size: 0.7rem;">
+                                        <i class="fa-regular fa-calendar-days me-1"></i>
+                                        {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Chưa có' }}
+                                    </span>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center text-muted py-5 small border-2 border-dashed border-secondary border-opacity-10 rounded-3">Chưa có công việc nào</div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-gray-100/70 rounded-xl p-4 border border-gray-200 flex flex-col h-full">
-                <div class="flex items-center mb-4 pb-2 border-b border-gray-200 shrink-0">
-                    <div class="w-3 h-3 rounded-full bg-orange-400 mr-3"></div>
-                    <h4 class="font-bold text-gray-700 text-base flex-1">Đang làm</h4>
-                    <span class="bg-orange-100 text-orange-600 text-xs font-bold px-2.5 py-1 rounded-full">{{ $inProgressTasks->count() }}</span>
-                </div>
-                <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
-                    @forelse($inProgressTasks as $task)
-                    <div x-data='{ taskData: @json($task) }' @click="$dispatch('open-edit-modal', taskData)" class="bg-white p-4 rounded-lg shadow-sm border border-orange-100 border-l-4 border-l-orange-400 cursor-pointer hover:shadow-md transition-all">
-                        <h5 class="text-sm font-semibold text-gray-800 mb-3">{{ $task->title }}</h5>
-                        <div class="flex justify-between items-center text-xs font-medium mt-4">
-                            <span class="bg-orange-50 text-orange-700 px-2.5 py-1 rounded-md">Task</span>
-                            <span class="text-gray-500">{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Chưa có' }}</span>
+            <!-- In Progress Column -->
+            <div class="col-md-4">
+                <div class="card bg-light border-0 shadow-sm rounded-3 h-100">
+                    <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 pb-0 px-3">
+                        <div class="d-flex align-items-center">
+                            <span class="rounded-circle bg-warning me-2" style="width: 10px; height: 10px; display: inline-block;"></span>
+                            <h6 class="fw-bold text-muted mb-0 small text-uppercase">Đang làm</h6>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            @if($inProgressTasks->count() > 0)
+                                <form action="{{ route('tasks.clearStatus') }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa toàn bộ công việc trong cột Đang làm?');" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="status" value="in_progress">
+                                    <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa tất cả trong cột này">
+                                        <i class="fa-solid fa-trash-can fs-6"></i>
+                                    </button>
+                                </form>
+                            @endif
+                            <span class="badge bg-warning rounded-pill">{{ $inProgressTasks->count() }}</span>
                         </div>
                     </div>
-                    @empty
-                    <div class="text-center text-sm text-gray-400 py-8 border-2 border-dashed border-gray-200 rounded-lg">Chưa có công việc nào</div>
-                    @endforelse
+                    <div class="card-body p-3 overflow-y-auto" style="max-height: 600px;">
+                        @forelse($inProgressTasks as $task)
+                            <div class="card border-0 border-bottom border-warning border-3 shadow-sm p-3 mb-3 cursor-pointer bg-white" 
+                                 onclick="openEditTaskModal({{ json_encode($task) }})">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                    <h6 class="mb-0 text-dark fw-semibold" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
+                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');" class="d-inline" onclick="event.stopPropagation();">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa công việc">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="badge bg-warning-subtle text-warning" style="font-size: 0.65rem;">Task</span>
+                                    <span class="text-muted" style="font-size: 0.7rem;">
+                                        <i class="fa-regular fa-calendar-days me-1"></i>
+                                        {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Chưa có' }}
+                                    </span>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center text-muted py-5 small border-2 border-dashed border-secondary border-opacity-10 rounded-3">Chưa có công việc nào</div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-gray-100/70 rounded-xl p-4 border border-gray-200 flex flex-col h-full">
-                <div class="flex items-center mb-4 pb-2 border-b border-gray-200 shrink-0">
-                    <div class="w-3 h-3 rounded-full bg-green-400 mr-3"></div>
-                    <h4 class="font-bold text-gray-700 text-base flex-1">Hoàn thành</h4>
-                    <span class="bg-green-100 text-green-600 text-xs font-bold px-2.5 py-1 rounded-full">{{ $completedTasks->count() }}</span>
-                </div>
-                <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
-                    @forelse($completedTasks as $task)
-                    <div x-data='{ taskData: @json($task) }' @click="$dispatch('open-edit-modal', taskData)" class="bg-white p-4 rounded-lg shadow-sm border border-green-100 border-l-4 border-l-green-400 cursor-pointer hover:shadow-md transition-all opacity-80">
-                        <h5 class="text-sm font-semibold text-gray-800 line-through mb-3">{{ $task->title }}</h5>
-                        <div class="flex justify-between items-center text-xs font-medium mt-4">
-                            <span class="bg-green-50 text-green-700 px-2.5 py-1 rounded-md">Done</span>
-                            <span class="text-gray-500">{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Chưa có' }}</span>
+            <!-- Completed Column -->
+            <div class="col-md-4">
+                <div class="card bg-light border-0 shadow-sm rounded-3 h-100">
+                    <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 pb-0 px-3">
+                        <div class="d-flex align-items-center">
+                            <span class="rounded-circle bg-success me-2" style="width: 10px; height: 10px; display: inline-block;"></span>
+                            <h6 class="fw-bold text-muted mb-0 small text-uppercase">Hoàn thành</h6>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            @if($completedTasks->count() > 0)
+                                <form action="{{ route('tasks.clearStatus') }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa toàn bộ công việc trong cột Hoàn thành?');" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="status" value="completed">
+                                    <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa tất cả trong cột này">
+                                        <i class="fa-solid fa-trash-can fs-6"></i>
+                                    </button>
+                                </form>
+                            @endif
+                            <span class="badge bg-success rounded-pill">{{ $completedTasks->count() }}</span>
                         </div>
                     </div>
-                    @empty
-                    <div class="text-center text-sm text-gray-400 py-8 border-2 border-dashed border-gray-200 rounded-lg">Chưa có công việc nào</div>
-                    @endforelse
+                    <div class="card-body p-3 overflow-y-auto" style="max-height: 600px;">
+                        @forelse($completedTasks as $task)
+                            <div class="card border-0 border-bottom border-success border-3 shadow-sm p-3 mb-3 cursor-pointer bg-white opacity-75" 
+                                 onclick="openEditTaskModal({{ json_encode($task) }})">
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                    <h6 class="mb-0 text-dark fw-semibold text-decoration-line-through" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
+                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');" class="d-inline" onclick="event.stopPropagation();">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa công việc">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2">
+                                    <span class="badge bg-success-subtle text-success" style="font-size: 0.65rem;">Done</span>
+                                    <span class="text-muted" style="font-size: 0.7rem;">
+                                        <i class="fa-regular fa-calendar-days me-1"></i>
+                                        {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Chưa có' }}
+                                    </span>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center text-muted py-5 small border-2 border-dashed border-secondary border-opacity-10 rounded-3">Chưa có công việc nào</div>
+                        @endforelse
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
+
+    <!-- Modals component -->
     <x-task-modals />
 </x-app-layout>

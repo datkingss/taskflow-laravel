@@ -3,70 +3,140 @@
         Báo cáo tổng hợp
     </x-slot>
 
-    <div class="max-w-7xl mx-auto py-8 space-y-6 px-4 sm:px-6 lg:px-8">
-        
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-                <div class="text-sm font-semibold text-gray-500 mb-1">Tổng công việc</div>
-                <div class="text-3xl font-bold text-gray-800">{{ $stats['total'] }}</div>
+    <div class="container-fluid">
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Tổng công việc</div>
+                        <h2 class="mb-0 fw-bold text-dark">{{ $stats['total'] }}</h2>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-                <div class="text-sm font-semibold text-gray-500 mb-1">Hoàn thành</div>
-                <div class="text-3xl font-bold text-green-600">{{ $stats['completed'] }}</div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Hoàn thành</div>
+                        <h2 class="mb-0 fw-bold text-success">{{ $stats['completed'] }}</h2>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-                <div class="text-sm font-semibold text-gray-500 mb-1">Đang thực hiện</div>
-                <div class="text-3xl font-bold text-orange-500">{{ $stats['in_progress'] }}</div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Đang thực hiện</div>
+                        <h2 class="mb-0 fw-bold text-warning">{{ $stats['in_progress'] }}</h2>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-5 shadow-sm">
-                <div class="text-sm font-semibold text-gray-500 mb-1">Chờ xử lý</div>
-                <div class="text-3xl font-bold text-indigo-600">{{ $stats['pending'] }}</div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Chờ xử lý</div>
+                        <h2 class="mb-0 fw-bold text-primary">{{ $stats['pending'] }}</h2>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-            <div class="p-5 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center bg-gray-50/50 gap-4">
-                <h3 class="text-base font-bold text-gray-800">Chi tiết tất cả công việc</h3>
+        <!-- Table Card -->
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <h5 class="mb-0 text-dark fw-bold">Chi tiết công việc của tôi</h5>
                 
-                <a href="{{ route('reports.export') }}" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors shadow-sm flex items-center">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Xuất file CSV (Excel)
-                </a>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <!-- Search Form -->
+                    <form action="{{ route('reports.index') }}" method="GET" class="d-flex" style="max-width: 320px;">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                            </span>
+                            <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm kiếm công việc..." value="{{ $search ?? '' }}">
+                            @if($search)
+                                <a href="{{ route('reports.index') }}" class="btn btn-outline-secondary d-flex align-items-center">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </a>
+                            @endif
+                            <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
+                                Tìm
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Export Excel/CSV Button -->
+                    <a href="{{ route('reports.export') }}" class="btn btn-success d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-file-excel me-2"></i> Xuất Excel (CSV)
+                    </a>
+                </div>
             </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse min-w-max">
-                    <thead>
-                        <tr class="bg-gray-50/80 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
-                            <th class="p-4 font-bold">Tên công việc</th>
-                            <th class="p-4 font-bold text-center">Trạng thái</th>
-                            <th class="p-4 font-bold text-center">Hạn chót</th>
-                            <th class="p-4 font-bold text-right">Ngày tạo</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @forelse($tasks as $task)
-                            <tr class="hover:bg-gray-50/50 transition-colors">
-                                <td class="p-4 text-sm font-semibold text-gray-800">{{ $task->title }}</td>
-                                <td class="p-4 text-center">
-                                    @if($task->status == 'completed')
-                                        <span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded font-bold">Hoàn thành</span>
-                                    @elseif($task->status == 'in_progress')
-                                        <span class="bg-orange-100 text-orange-700 text-xs px-2.5 py-1 rounded font-bold">Đang làm</span>
-                                    @else
-                                        <span class="bg-gray-100 text-gray-600 text-xs px-2.5 py-1 rounded font-bold">Chờ xử lý</span>
-                                    @endif
-                                </td>
-                                <td class="p-4 text-center text-sm text-gray-500">{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i') : '--' }}</td>
-                                <td class="p-4 text-right text-sm text-gray-500">{{ $task->created_at->format('d/m/Y') }}</td>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em;">
+                            <tr>
+                                <th class="px-4 py-3 text-muted">Tên công việc</th>
+                                <th class="py-3 text-muted text-center">Trạng thái</th>
+                                <th class="py-3 text-muted text-center">Hạn chót</th>
+                                <th class="px-4 py-3 text-muted text-end">Ngày tạo</th>
                             </tr>
-                        @empty
-                            <tr><td colspan="4" class="p-8 text-center text-gray-400 text-sm">Chưa có dữ liệu công việc nào.</td></tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @forelse($tasks as $task)
+                                <tr>
+                                    <td class="px-4">
+                                        <div class="fw-semibold text-dark">{{ $task->title }}</div>
+                                        <div class="text-muted small text-truncate" style="max-width: 300px;">{{ $task->description }}</div>
+                                    </td>
+                                    <td class="text-center">
+                                        @if($task->status == 'completed')
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1.5 rounded" style="font-size: 0.7rem; font-weight: 700;">
+                                                Hoàn thành
+                                            </span>
+                                        @elseif($task->status == 'in_progress')
+                                            <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1.5 rounded" style="font-size: 0.7rem; font-weight: 700;">
+                                                Đang làm
+                                            </span>
+                                        @else
+                                            <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle px-2.5 py-1.5 rounded" style="font-size: 0.7rem; font-weight: 700;">
+                                                Chờ xử lý
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center text-muted" style="font-size: 0.9rem;">
+                                        {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Không có' }}
+                                    </td>
+                                    <td class="px-4 text-end text-muted" style="font-size: 0.9rem;">
+                                        {{ $task->created_at->format('d/m/Y') }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center py-5 text-muted">
+                                        <i class="fa-solid fa-list-check d-block fs-1 mb-3 text-secondary opacity-50"></i>
+                                        Không tìm thấy công việc nào.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
+
+            <!-- Card Footer Pagination -->
+            @if($tasks->hasPages())
+                <div class="card-footer bg-white py-3 border-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-muted small">
+                            Hiển thị <strong>{{ $tasks->firstItem() }}</strong> đến <strong>{{ $tasks->lastItem() }}</strong> trong tổng số <strong>{{ $tasks->total() }}</strong> công việc
+                        </div>
+                        <div>
+                            {{ $tasks->links('pagination::bootstrap-5') }}
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
-        
     </div>
 </x-app-layout>

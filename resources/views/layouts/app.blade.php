@@ -1,114 +1,228 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'TaskFlow') }}</title>
+    <title>{{ config('app.name', 'TaskFlow') }}</title>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased flex h-screen overflow-hidden bg-gray-50">
-        
-        <aside class="w-64 bg-[#1e1e2d] text-white flex flex-col hidden md:flex shrink-0">
-            <div class="h-16 flex items-center px-6 border-b border-gray-700/50">
-                <div class="w-8 h-8 bg-indigo-500 rounded-lg mr-3 shadow-lg shadow-indigo-500/30"></div>
-                <span class="text-xl font-bold tracking-wide">TaskFlow</span>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fc;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            min-width: 260px;
+            max-width: 260px;
+            background-color: #1e1e2d;
+            color: #a2a3b7;
+            min-height: 100vh;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        .sidebar .nav-link {
+            color: #a2a3b7;
+            padding: 12px 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            border-radius: 6px;
+            margin: 4px 15px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .sidebar .nav-link:hover {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .sidebar .nav-link.active {
+            color: #ffffff;
+            background-color: #4f46e5;
+        }
+        .sidebar-heading {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 15px 30px 5px;
+            color: #494b66;
+            font-weight: 700;
+        }
+        .main-container {
+            flex: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .app-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 15px 30px;
+            height: 64px;
+        }
+        .app-content {
+            padding: 30px;
+            background-color: #f8f9fc;
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body class="d-flex">
+
+    <!-- Sidebar -->
+    <div class="sidebar d-flex flex-column shrink-0">
+        <div class="p-4 border-bottom border-secondary border-opacity-10 d-flex align-items-center">
+            <div class="bg-primary rounded-3 text-white d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px; background-color: #4f46e5 !important;">
+                <i class="fa-solid fa-list-check"></i>
             </div>
+            <span class="fs-4 fw-bold text-white tracking-wide">TaskFlow</span>
+        </div>
 
-            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
-                
-                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 mt-2 px-2">Tổng quan</div>
-                
-                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2.5 rounded-lg group transition-colors {{ request()->routeIs('dashboard') ? 'bg-indigo-600/20 text-indigo-400' : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' }}">
-                    <span class="font-medium">Trang chủ</span>
+        <div class="sidebar-heading">Tổng quan</div>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <i class="fa-solid fa-house me-3"></i>
+                    Trang chủ
                 </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('tasks.index') }}" class="nav-link {{ request()->routeIs('tasks.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-square-check me-3"></i>
+                    Công việc
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('calendar.index') }}" class="nav-link {{ request()->routeIs('calendar.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-calendar-days me-3"></i>
+                    Lịch
+                </a>
+            </li>
+        </ul>
 
-                <a href="{{ route('tasks.index') }}" class="flex items-center justify-between px-4 py-2.5 rounded-lg group transition-colors mt-1 {{ request()->routeIs('tasks.*') ? 'bg-indigo-600/20 text-indigo-400' : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' }}">
-                    <span class="font-medium">Công việc</span>
-                    <span class="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded-full">Toàn bộ</span>
+        <div class="sidebar-heading">Quản lý</div>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a href="{{ route('teams.index') }}" class="nav-link {{ request()->routeIs('teams.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-people-group me-3"></i>
+                    Nhóm làm việc
                 </a>
-
-                <a href="{{ route('calendar.index') }}" class="flex items-center px-4 py-2.5 rounded-lg group transition-colors mt-1 {{ request()->routeIs('calendar.*') ? 'bg-indigo-600/20 text-indigo-400' : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' }}">
-                    <span class="font-medium">Lịch</span>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('reports.index') }}" class="nav-link {{ request()->routeIs('reports.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-file-invoice-dollar me-3"></i>
+                    Báo cáo
                 </a>
-                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 mt-6 px-2">Quản lý</div>
-                
-                <a href="{{ route('teams.index') }}" class="flex items-center px-4 py-2.5 rounded-lg group transition-colors mt-1 {{ request()->routeIs('teams.*') ? 'bg-indigo-600/20 text-indigo-400' : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' }}">
-                    <span class="font-medium">Nhóm</span>
-                </a>
-                <a href="{{ route('reports.index') }}" class="flex items-center px-4 py-2.5 rounded-lg group transition-colors mt-1 {{ request()->routeIs('reports.*') ? 'bg-indigo-600/20 text-indigo-400' : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' }}">
-                    <span class="font-medium">Báo cáo</span>
-                </a>
-                <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-4 py-2.5 rounded-lg group transition-colors mt-1 {{ request()->routeIs('notifications.*') ? 'bg-indigo-600/20 text-indigo-400' : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200' }}">
-                    <span class="font-medium">Thông báo</span>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('notifications.index') }}" class="nav-link {{ request()->routeIs('notifications.*') ? 'active' : '' }} d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fa-solid fa-bell me-3"></i>
+                        Thông báo
+                    </div>
                     @if(auth()->user()->unreadNotifications->count() > 0)
-                        <span class="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded-full shadow-sm">
-                            {{ auth()->user()->unreadNotifications->count() }}
+                        <span class="badge bg-danger rounded-pill">{{ auth()->user()->unreadNotifications->count() }}</span>
+                    @endif
+                </a>
+            </li>
+        </ul>
+
+        @if(auth()->user()->role === 'admin')
+            <div class="sidebar-heading text-danger">Quản trị</div>
+            <ul class="nav flex-column mb-2">
+                <li class="nav-item">
+                    <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-users-gear me-3"></i>
+                        Quản lý User
+                    </a>
+                </li>
+            </ul>
+        @endif
+
+        <div class="sidebar-heading">Hệ thống</div>
+        <ul class="nav flex-column mb-auto">
+            <li class="nav-item">
+                <a href="{{ route('profile.edit') }}" class="nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-user-gear me-3"></i>
+                    Cài đặt hồ sơ
+                </a>
+            </li>
+        </ul>
+
+        <!-- User profile section -->
+        <div class="p-4 border-top border-secondary border-opacity-10">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold me-3" style="width: 36px; height: 36px; background-color: #4f46e5 !important;">
+                    {{ strtoupper(substr(auth()->user()->name, 0, 2)) }}
+                </div>
+                <div class="overflow-hidden">
+                    <p class="mb-0 text-white fw-semibold text-truncate" style="font-size: 0.9rem;">{{ auth()->user()->name }}</p>
+                    <span class="badge bg-secondary text-uppercase" style="font-size: 0.65rem;">
+                        {{ auth()->user()->role === 'admin' ? 'Quản trị viên' : 'Thành viên' }}
+                    </span>
+                </div>
+            </div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="btn btn-outline-danger btn-sm w-100 text-start">
+                    <i class="fa-solid fa-right-from-bracket me-2"></i> Đăng xuất
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="app-header d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fw-bold text-dark">{{ $header ?? 'Dashboard' }}</h4>
+            <div class="d-flex align-items-center">
+                <!-- Notifications quick view -->
+                <a href="{{ route('notifications.index') }}" class="position-relative p-2 text-secondary hover-text-primary me-4">
+                    <i class="fa-solid fa-bell fs-5"></i>
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                        <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                            <span class="visually-hidden">New alerts</span>
                         </span>
                     @endif
                 </a>
 
-                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 mt-6 px-2">Hệ thống</div>
-                <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2.5 text-gray-400 hover:bg-gray-800 hover:text-gray-200 rounded-lg group transition-colors">
-                    <span class="font-medium">Cài đặt</span>
-                </a>
-            </nav>
-
-            <div class="p-4 border-t border-gray-700/50">
-                <div class="flex items-center px-2">
-                    <div class="w-9 h-9 bg-indigo-600 rounded-full flex items-center justify-center font-bold text-sm shadow-md">
-                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
-                    </div>
-                    <div class="ml-3 overflow-hidden">
-                        <p class="text-sm font-medium text-white truncate">{{ Auth::user()->name }}</p>
-                        <p class="text-xs text-gray-400 truncate">Admin</p> 
-                    </div>
-                </div>
-                <form method="POST" action="{{ route('logout') }}" class="mt-3">
-                    @csrf
-                    <button type="submit" class="w-full text-left px-2 text-xs text-gray-500 hover:text-red-400 transition-colors">Đăng xuất</button>
-                </form>
+                <!-- Quick create task button -->
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTaskModal" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
+                    <i class="fa-solid fa-plus me-1"></i> Tạo task
+                </button>
             </div>
-        </aside>
+        </header>
 
-        <div class="flex-1 flex flex-col min-w-0 bg-white">
-            
-            <header class="h-16 border-b border-gray-100 flex items-center justify-between px-8 shrink-0 bg-white">
-                <div>
-                    <h2 class="text-xl font-semibold text-gray-800">
-                        {{ $header ?? 'Dashboard' }}
-                    </h2>
+        <!-- Main Content -->
+        <main class="app-content">
+            <!-- Global Flash Alerts -->
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+                    <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                
-                <div class="flex items-center">
-                    <a href="{{ route('notifications.index') }}" class="relative p-2 mr-4 text-gray-400 hover:text-indigo-600 transition-colors focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                        </svg>
+            @endif
 
-                        @if(auth()->user()->unreadNotifications->count() > 0)
-                            <span class="absolute top-1.5 right-1.5 flex h-2.5 w-2.5">
-                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 border-2 border-white"></span>
-                            </span>
-                        @endif
-                    </a>
-
-                    <button x-data="" x-on:click.prevent="$dispatch('open-modal', 'create-task')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm shadow-indigo-600/30">
-                        Tạo task
-                    </button>
+            @if(session('error'))
+                <div class="alert alert-danger alert-dismissible fade show shadow-sm mb-4" role="alert">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i> {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            </header>
+            @endif
 
-            <main class="flex-1 overflow-y-auto p-8 bg-gray-50/50">
-                {{ $slot }}
-            </main>
-        </div>
-        
-    </body>
+            {{ $slot }}
+        </main>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS (Popper included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

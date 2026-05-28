@@ -1,52 +1,53 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <h4 class="text-center fw-bold mb-4 text-dark">Đăng ký tài khoản</h4>
+
+    <form method="POST" action="{{ route('register') }}" novalidate>
         @csrf
 
         <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        <div class="mb-3">
+            <label for="name" class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Họ và tên</label>
+            <input id="name" type="text" name="name" class="form-control py-2 @error('name') is-invalid @enderror" value="{{ old('name') }}" required autofocus autocomplete="name">
+            @error('name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="mb-3">
+            <label for="email" class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Địa chỉ Email</label>
+            <input id="email" type="email" name="email" class="form-control py-2 @error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="username">
+            @error('email')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="mb-3">
+            <label for="password" class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Mật khẩu</label>
+            <input id="password" type="password" name="password" class="form-control py-2 @error('password') is-invalid @enderror" required autocomplete="new-password">
+            @error('password')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <div class="mb-4">
+            <label for="password_confirmation" class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Xác nhận mật khẩu</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" class="form-control py-2 @error('password_confirmation') is-invalid @enderror" required autocomplete="new-password">
+            @error('password_confirmation')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-100 py-2.5 fw-bold" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
+            Đăng ký
+        </button>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <div class="text-center mt-4">
+            <span class="text-muted small">Đã có tài khoản?</span>
+            <a href="{{ route('login') }}" class="text-decoration-none small fw-bold text-primary ms-1">Đăng nhập</a>
         </div>
     </form>
 </x-guest-layout>

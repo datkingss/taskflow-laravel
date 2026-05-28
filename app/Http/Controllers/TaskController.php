@@ -9,14 +9,24 @@ use App\Notifications\TaskActivityNotification;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Lấy toàn bộ task và phân loại theo trạng thái (không giới hạn số lượng)
-        $pendingTasks = Task::where('status', 'pending')->latest()->get();
-        $inProgressTasks = Task::where('status', 'in_progress')->latest()->get();
-        $completedTasks = Task::where('status', 'completed')->latest()->get();
+        $search = $request->input('search');
+        $query = Task::query();
 
-        return view('tasks.index', compact('pendingTasks', 'inProgressTasks', 'completedTasks'));
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        // Lấy toàn bộ task và phân loại theo trạng thái (có bộ lọc tìm kiếm)
+        $pendingTasks = (clone $query)->where('status', 'pending')->latest()->get();
+        $inProgressTasks = (clone $query)->where('status', 'in_progress')->latest()->get();
+        $completedTasks = (clone $query)->where('status', 'completed')->latest()->get();
+
+        return view('tasks.index', compact('pendingTasks', 'inProgressTasks', 'completedTasks', 'search'));
     }
 
     public function store(Request $request)
@@ -74,5 +84,21 @@ class TaskController extends Controller
         $task->delete();
 
         return redirect()->back()->with('success', 'Đã xóa công việc!');
+    }
+
+    public function clearStatus(Request $request)
+    {
+        // 1. Xác thực trạng thái hợp lệ
+        $validated = $request->validate([
+            'status' => 'required|in:pending,in_progress,completed',
+        ]);
+
+        // 2. Xóa các công việc thuộc trạng thái này của người dùng hiện tại
+        Task::where('created_by', Auth::id())
+            ->where('status', $validated['status'])
+            ->delete();
+
+        // 3. Quay lại và thông báo thành công
+        return redirect()->back()->with('success', 'Đã xóa toàn bộ công việc trong cột!');
     }
 }

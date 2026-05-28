@@ -3,154 +3,192 @@
         Trang chủ
     </x-slot>
 
-    <div class="max-w-7xl mx-auto space-y-8 py-6">
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">Tổng task</div>
-                <div class="text-4xl font-bold text-gray-800">{{ $totalTasks }}</div>
-                <div class="text-sm text-green-500 mt-2 font-medium">+8 tuần này</div>
+    <div class="container-fluid">
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Tổng task</div>
+                        <h2 class="mb-1 fw-bold text-dark">{{ $totalTasks }}</h2>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">Đang thực hiện</div>
-                <div class="text-4xl font-bold text-gray-800">{{ $inProgressTasks }}</div>
-                <div class="text-sm text-gray-400 mt-2 font-medium">{{ $inProgressPercent }}% tổng số</div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Đang thực hiện</div>
+                        <h2 class="mb-1 fw-bold text-warning">{{ $inProgressTasks }}</h2>
+                        <span class="text-muted small fw-medium">{{ $inProgressPercent }}% tổng số</span>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">Hoàn thành</div>
-                <div class="text-4xl font-bold text-gray-800">{{ $completedTasks }}</div>
-                <div class="text-sm text-green-500 mt-2 font-medium">{{ $completedPercent }}%</div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Hoàn thành</div>
+                        <h2 class="mb-1 fw-bold text-success">{{ $completedTasks }}</h2>
+                        <span class="text-success small fw-medium">{{ $completedPercent }}%</span>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="text-sm font-semibold text-gray-500 mb-2 uppercase tracking-wide">Quá hạn</div>
-                <div class="text-4xl font-bold text-red-500">{{ $overdueTasks }}</div>
-                <div class="text-sm text-red-500 mt-2 font-medium">Cần xử lý ngay</div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="card shadow-sm border-0 rounded-3 h-100">
+                    <div class="card-body p-4">
+                        <div class="text-muted text-uppercase fw-semibold mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Quá hạn</div>
+                        <h2 class="mb-1 fw-bold text-danger">{{ $overdueTasks }}</h2>
+                        <span class="text-danger small fw-medium">Cần xử lý ngay</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div class="lg:col-span-2 space-y-8">
+        <div class="row g-4">
+            <!-- Left Side: Tasks Board & Recent Activities -->
+            <div class="col-lg-8 d-flex flex-column gap-4">
                 
-                <div>
-                    <div class="flex justify-between items-center mb-5">
-                        <h3 class="text-lg font-bold text-gray-800">Bảng quản lý công việc</h3>
-                        <a href="{{ route('tasks.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">Xem tất cả &rarr;</a>
+                <!-- Mini Kanban Board -->
+                <div class="card shadow-sm border-0 rounded-3 p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-dark mb-0">Bảng quản lý công việc (Tóm tắt)</h5>
+                        <a href="{{ route('tasks.index') }}" class="text-decoration-none small fw-semibold text-primary">Xem tất cả &rarr;</a>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-gray-100/50 rounded-xl p-4 border border-gray-200/60 flex flex-col max-h-[500px] overflow-y-auto custom-scrollbar">
-                            <div class="flex items-center mb-4 sticky top-0 bg-gray-100/90 pb-2 z-10">
-                                <div class="w-2.5 h-2.5 rounded-full bg-gray-400 mr-2"></div>
-                                <h4 class="font-semibold text-gray-700 text-sm">Chờ xử lý ({{ $pendingTasksCount }})</h4>
-                            </div>
-                            @forelse($pendingTasksList as $task)
-                            <div x-data='{ taskData: @json($task) }' @click="$dispatch('open-edit-modal', taskData)" class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 mb-3 cursor-pointer hover:border-indigo-300 hover:shadow-md transition-all">
-                                <h5 class="text-sm font-semibold text-gray-800 mb-3 line-clamp-2" title="{{ $task->title }}">{{ $task->title }}</h5>
-                                <div class="flex justify-between items-center text-xs font-medium">
-                                    <span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-md">Task</span>
-                                    <span class="text-gray-500">{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m') : 'N/A' }}</span>
+                    <div class="row g-3">
+                        <!-- Pending column -->
+                        <div class="col-md-4">
+                            <div class="bg-light p-3 rounded-3 h-100 border border-secondary border-opacity-10">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="rounded-circle bg-secondary me-2" style="width: 10px; height: 10px; display: inline-block;"></span>
+                                    <span class="fw-bold text-muted small text-uppercase">Chờ xử lý ({{ $pendingTasksCount }})</span>
                                 </div>
+                                @forelse($pendingTasksList as $task)
+                                    <div class="card border-0 shadow-sm p-3 mb-2 cursor-pointer bg-white" 
+                                         onclick="openEditTaskModal({{ json_encode($task) }})" style="transition: transform 0.2s;">
+                                        <h6 class="mb-2 text-dark fw-semibold" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
+                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                            <span class="badge bg-secondary-subtle text-secondary" style="font-size: 0.65rem;">Task</span>
+                                            <span class="text-muted" style="font-size: 0.7rem;"><i class="fa-regular fa-calendar me-1"></i>{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m') : 'N/A' }}</span>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center text-muted small py-3">Không có task</div>
+                                @endforelse
                             </div>
-                            @empty
-                            <div class="text-center text-sm text-gray-400 py-4">Không có task</div>
-                            @endforelse
                         </div>
 
-                        <div class="bg-gray-100/50 rounded-xl p-4 border border-gray-200/60 flex flex-col max-h-[500px] overflow-y-auto custom-scrollbar">
-                            <div class="flex items-center mb-4 sticky top-0 bg-gray-100/90 pb-2 z-10">
-                                <div class="w-2.5 h-2.5 rounded-full bg-orange-400 mr-2"></div>
-                                <h4 class="font-semibold text-gray-700 text-sm">Đang làm ({{ $inProgressTasks }})</h4>
-                            </div>
-                            @forelse($inProgressTasksList as $task)
-                            <div x-data='{ taskData: @json($task) }' @click="$dispatch('open-edit-modal', taskData)" class="bg-white p-4 rounded-lg shadow-sm border border-orange-100 border-b-2 border-b-orange-400 mb-3 cursor-pointer hover:shadow-md transition-all">
-                                <h5 class="text-sm font-semibold text-gray-800 mb-3 line-clamp-2" title="{{ $task->title }}">{{ $task->title }}</h5>
-                                <div class="flex justify-between items-center text-xs font-medium">
-                                    <span class="bg-orange-50 text-orange-700 px-2.5 py-1 rounded-md">Task</span>
-                                    <span class="text-gray-500">{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m') : 'N/A' }}</span>
+                        <!-- In Progress column -->
+                        <div class="col-md-4">
+                            <div class="bg-light p-3 rounded-3 h-100 border border-secondary border-opacity-10">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="rounded-circle bg-warning me-2" style="width: 10px; height: 10px; display: inline-block;"></span>
+                                    <span class="fw-bold text-muted small text-uppercase">Đang làm ({{ $inProgressTasks }})</span>
                                 </div>
+                                @forelse($inProgressTasksList as $task)
+                                    <div class="card border-0 border-bottom border-warning border-2 shadow-sm p-3 mb-2 cursor-pointer bg-white" 
+                                         onclick="openEditTaskModal({{ json_encode($task) }})">
+                                        <h6 class="mb-2 text-dark fw-semibold" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
+                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                            <span class="badge bg-warning-subtle text-warning" style="font-size: 0.65rem;">Task</span>
+                                            <span class="text-muted" style="font-size: 0.7rem;"><i class="fa-regular fa-calendar me-1"></i>{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m') : 'N/A' }}</span>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center text-muted small py-3">Không có task</div>
+                                @endforelse
                             </div>
-                            @empty
-                            <div class="text-center text-sm text-gray-400 py-4">Không có task</div>
-                            @endforelse
                         </div>
 
-                        <div class="bg-gray-100/50 rounded-xl p-4 border border-gray-200/60 flex flex-col max-h-[500px] overflow-y-auto custom-scrollbar">
-                            <div class="flex items-center mb-4 sticky top-0 bg-gray-100/90 pb-2 z-10">
-                                <div class="w-2.5 h-2.5 rounded-full bg-green-400 mr-2"></div>
-                                <h4 class="font-semibold text-gray-700 text-sm">Hoàn thành ({{ $completedTasks }})</h4>
-                            </div>
-                            @forelse($completedTasksList as $task)
-                            <div x-data='{ taskData: @json($task) }' @click="$dispatch('open-edit-modal', taskData)" class="bg-white p-4 rounded-lg shadow-sm border border-green-100 border-b-2 border-b-green-400 mb-3 cursor-pointer hover:shadow-md transition-all">
-                                <h5 class="text-sm font-semibold text-gray-800 mb-3 line-clamp-2" title="{{ $task->title }}">{{ $task->title }}</h5>
-                                <div class="flex justify-between items-center text-xs font-medium">
-                                    <span class="bg-green-50 text-green-700 px-2.5 py-1 rounded-md">Done</span>
-                                    <span class="text-gray-500">{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m') : 'N/A' }}</span>
+                        <!-- Completed column -->
+                        <div class="col-md-4">
+                            <div class="bg-light p-3 rounded-3 h-100 border border-secondary border-opacity-10">
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="rounded-circle bg-success me-2" style="width: 10px; height: 10px; display: inline-block;"></span>
+                                    <span class="fw-bold text-muted small text-uppercase">Hoàn thành ({{ $completedTasks }})</span>
                                 </div>
+                                @forelse($completedTasksList as $task)
+                                    <div class="card border-0 border-bottom border-success border-2 shadow-sm p-3 mb-2 cursor-pointer bg-white" 
+                                         onclick="openEditTaskModal({{ json_encode($task) }})">
+                                        <h6 class="mb-2 text-dark fw-semibold text-decoration-line-through" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
+                                        <div class="d-flex justify-content-between align-items-center mt-2">
+                                            <span class="badge bg-success-subtle text-success" style="font-size: 0.65rem;">Done</span>
+                                            <span class="text-muted" style="font-size: 0.7rem;"><i class="fa-regular fa-calendar me-1"></i>{{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m') : 'N/A' }}</span>
+                                        </div>
+                                    </div>
+                                @empty
+                                    <div class="text-center text-muted small py-3">Không có task</div>
+                                @endforelse
                             </div>
-                            @empty
-                            <div class="text-center text-sm text-gray-400 py-4">Không có task</div>
-                            @endforelse
                         </div>
                     </div>
                 </div>
 
-                <div>
-                    <div class="flex justify-between items-center mb-5">
-                        <h3 class="text-lg font-bold text-gray-800">Hoạt động gần đây</h3>
-                        <a href="{{ route('notifications.index') }}" class="text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">Xem tất cả &rarr;</a>
+                <!-- Recent Activities -->
+                <div class="card shadow-sm border-0 rounded-3 p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold text-dark mb-0">Hoạt động gần đây</h5>
+                        <a href="{{ route('notifications.index') }}" class="text-decoration-none small fw-semibold text-primary">Xem tất cả &rarr;</a>
                     </div>
                     
-                    <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm space-y-5">
+                    <ul class="list-group list-group-flush">
                         @forelse($recentActivities as $activity)
-                            <div class="flex items-center">
-                                @php
-                                    $colorClass = 'bg-indigo-100 border-indigo-200';
-                                    if(isset($activity->data['action'])) {
-                                        if($activity->data['action'] == 'cập nhật') $colorClass = 'bg-orange-100 border-orange-200';
-                                        if($activity->data['action'] == 'xóa') $colorClass = 'bg-red-100 border-red-200';
-                                    }
-                                @endphp
-                                
-                                <div class="w-9 h-9 rounded-full flex-shrink-0 border {{ $colorClass }}"></div>
-                                
-                                <div class="ml-4 flex-1">
-                                    <p class="text-sm text-gray-700">
-                                        <span class="font-semibold text-gray-900">{{ Auth::user()->name }}</span> 
-                                        vừa {{ $activity->data['action'] ?? 'thao tác' }} task 
-                                        <span class="font-medium text-indigo-600">{{ $activity->data['title'] ?? '' }}</span>
+                            @php
+                                $badgeClass = 'bg-primary-subtle text-primary border-primary-subtle';
+                                if(isset($activity->data['action'])) {
+                                    if($activity->data['action'] == 'cập nhật') $badgeClass = 'bg-warning-subtle text-warning border-warning-subtle';
+                                    if($activity->data['action'] == 'xóa') $badgeClass = 'bg-danger-subtle text-danger border-danger-subtle';
+                                }
+                            @endphp
+                            <li class="list-group-item px-0 py-3 d-flex align-items-center border-0 border-bottom border-light">
+                                <span class="badge {{ $badgeClass }} border rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 32px; height: 32px;">
+                                    <i class="fa-solid fa-bell fs-6"></i>
+                                </span>
+                                <div class="flex-grow-1 overflow-hidden">
+                                    <p class="mb-0 text-dark text-truncate small">
+                                        <strong>{{ auth()->user()->name }}</strong> vừa {{ $activity->data['action'] ?? 'thao tác' }} task 
+                                        <span class="text-primary fw-medium">{{ $activity->data['title'] ?? '' }}</span>
                                     </p>
                                 </div>
-                                <span class="text-xs font-medium text-gray-400">{{ $activity->created_at->diffForHumans() }}</span>
-                            </div>
+                                <span class="text-muted small ms-2 shrink-0">{{ $activity->created_at->diffForHumans() }}</span>
+                            </li>
                         @empty
-                            <div class="text-center text-sm text-gray-400 py-4">Chưa có hoạt động nào gần đây.</div>
+                            <li class="list-group-item text-center text-muted py-4 border-0">
+                                Chưa có hoạt động nào gần đây.
+                            </li>
                         @endforelse
-                    </div>
+                    </ul>
                 </div>
+            </div>
 
-            </div> <div class="space-y-6">
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-                    <h3 class="text-base font-bold text-gray-800 mb-4">Tiến độ theo tuần</h3>
-                    <div class="relative h-48 w-full">
+            <!-- Right Side: Charts -->
+            <div class="col-lg-4 d-flex flex-column gap-4">
+                <!-- Weekly Chart -->
+                <div class="card shadow-sm border-0 rounded-3 p-4">
+                    <h5 class="fw-bold text-dark mb-3">Tiến độ theo tuần</h5>
+                    <div style="height: 200px; position: relative;">
                         <canvas id="weeklyChart"></canvas>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-xl border border-gray-100 p-6 shadow-sm">
-                    <h3 class="text-base font-bold text-gray-800 mb-4">Thống kê trạng thái công việc</h3>
-                    <div class="relative h-48 w-full flex justify-center">
+                <!-- Distribution Chart -->
+                <div class="card shadow-sm border-0 rounded-3 p-4">
+                    <h5 class="fw-bold text-dark mb-3">Thống kê trạng thái công việc</h5>
+                    <div style="height: 200px; position: relative;" class="d-flex justify-content-center">
                         <canvas id="distributionChart"></canvas>
                     </div>
                 </div>
-            </div> </div> </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Modals -->
     <x-task-modals />
 
+    <!-- ChartJS Script -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Biểu đồ cột
+            // Weekly Chart
             const ctxBar = document.getElementById('weeklyChart').getContext('2d');
             new Chart(ctxBar, {
                 type: 'bar',
@@ -161,7 +199,7 @@
                         data: @json($chartBarData),
                         backgroundColor: '#4f46e5',
                         borderRadius: 4,
-                        barThickness: 24
+                        barThickness: 16
                     }]
                 },
                 options: {
@@ -175,7 +213,7 @@
                 }
             });
 
-            // Biểu đồ tròn
+            // Distribution Chart
             const ctxPie = document.getElementById('distributionChart').getContext('2d');
             new Chart(ctxPie, {
                 type: 'doughnut',
@@ -183,11 +221,7 @@
                     labels: ['Hoàn thành', 'Đang làm', 'Quá hạn'],
                     datasets: [{
                         data: @json($chartPieData), 
-                        backgroundColor: [
-                            '#4ade80', // Xanh lá
-                            '#fb923c', // Cam
-                            '#ef4444'  // Đỏ
-                        ],
+                        backgroundColor: ['#198754', '#ffc107', '#dc3545'],
                         borderWidth: 0,
                         hoverOffset: 4
                     }]
@@ -197,7 +231,7 @@
                     maintainAspectRatio: false,
                     cutout: '75%', 
                     plugins: {
-                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } },
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
@@ -205,7 +239,6 @@
                                     let value = context.raw || 0;
                                     let total = context.chart._metasets[context.datasetIndex].total;
                                     let percentage = total > 0 ? Math.round((value / total) * 100) + '%' : '0%';
-                                    
                                     return `${label}: ${value} task (${percentage})`;
                                 }
                             }

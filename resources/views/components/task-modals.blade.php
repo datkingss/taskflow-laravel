@@ -1,85 +1,128 @@
-<x-modal name="create-task" focusable>
-    <form method="post" action="{{ route('tasks.store') }}" class="p-6">
-        @csrf
-        <h2 class="text-lg font-bold text-white mb-4">Tạo công việc mới</h2>
-        <div class="space-y-4">
-            <div>
-                <x-input-label for="title" value="Tiêu đề công việc" />
-                <input type="text" id="title" name="title" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm bg-white text-gray-900" placeholder="VD: Thiết kế giao diện..." required>
-            </div>
-            <div>
-                <x-input-label for="description" value="Mô tả" />
-                <textarea id="description" name="description" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3"></textarea>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <x-input-label for="status" value="Trạng thái" />
-                    <select id="status" name="status" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                        <option value="pending">Chờ xử lý</option>
-                        <option value="in_progress">Đang làm</option>
-                        <option value="completed">Hoàn thành</option>
-                    </select>
+<!-- Create Task Modal -->
+<div class="modal fade" id="createTaskModal" tabindex="-1" aria-labelledby="createTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('tasks.store') }}">
+            @csrf
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light">
+                    <h5 class="modal-title fw-bold text-dark" id="createTaskModalLabel">Tạo công việc mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div>
-                    <x-input-label for="due_date" value="Hạn chót" />
-                    <input type="date" id="due_date" name="due_date" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm bg-white text-gray-900">
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label for="title" class="form-label fw-semibold small text-muted">Tiêu đề công việc</label>
+                        <input type="text" id="title" name="title" class="form-control" placeholder="VD: Thiết kế giao diện..." required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label fw-semibold small text-muted">Mô tả</label>
+                        <textarea id="description" name="description" class="form-control" rows="3" placeholder="Chi tiết công việc..."></textarea>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="status" class="form-label fw-semibold small text-muted">Trạng thái</label>
+                            <select id="status" name="status" class="form-select">
+                                <option value="pending">Chờ xử lý</option>
+                                <option value="in_progress">Đang làm</option>
+                                <option value="completed">Hoàn thành</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="due_date" class="form-label fw-semibold small text-muted">Hạn chót</label>
+                            <input type="date" id="due_date" name="due_date" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Lưu công việc</button>
                 </div>
             </div>
-        </div>
-        <div class="mt-6 flex justify-end space-x-3">
-            <button type="button" x-on:click="$dispatch('close')" class="px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-lg shadow-sm">Hủy bỏ</button>
-            <button type="submit" class="px-4 py-2.5 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg shadow-sm">Lưu công việc</button>
-        </div>
-    </form>
-</x-modal>
+        </form>
+    </div>
+</div>
 
-<x-modal name="edit-task" focusable>
-    <div x-data="{ task: null }" @open-edit-modal.window="task = $event.detail; $dispatch('open-modal', 'edit-task')">
-        <template x-if="task">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold text-white">Chi tiết công việc</h2>
-                    <form method="POST" :action="'/tasks/' + task.id" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');">
+<!-- Edit Task Modal -->
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="editTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title fw-bold text-dark" id="editTaskModalLabel">Chi tiết công việc</h5>
+                <div class="d-flex align-items-center gap-2 ms-auto me-2">
+                    <!-- Delete Form inside header -->
+                    <form id="deleteTaskForm" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-md font-medium text-sm transition-colors flex items-center">
-                            Xóa
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i class="fa-regular fa-trash-can"></i> Xóa
                         </button>
                     </form>
                 </div>
-                <form method="POST" :action="'/tasks/' + task.id">
-                    @csrf
-                    @method('PUT')
-                    <div class="space-y-4">
-                        <div>
-                            <x-input-label for="edit_title" value="Tiêu đề công việc" />
-                            <input type="text" id="edit_title" name="title" :value="task.title" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm bg-white text-gray-900" required>
-                        </div>
-                        <div>
-                            <x-input-label for="edit_description" value="Mô tả" />
-                            <textarea id="edit_description" name="description" x-text="task.description" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows="3"></textarea>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <x-input-label for="edit_status" value="Trạng thái" />
-                                <select id="edit_status" name="status" x-model="task.status" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                                    <option value="pending">Chờ xử lý</option>
-                                    <option value="in_progress">Đang làm</option>
-                                    <option value="completed">Hoàn thành</option>
-                                </select>
-                            </div>
-                            <div>
-                                <x-input-label for="edit_due_date" value="Hạn chót" />
-                                <input type="date" id="edit_due_date" name="due_date" :value="task.due_date ? task.due_date.split('T')[0] : ''" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm bg-white text-gray-900">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-6 flex justify-end space-x-3">
-                        <button type="button" x-on:click="$dispatch('close')" class="px-4 py-2.5 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium rounded-lg">Đóng</button>
-                        <button type="submit" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg">Cập nhật</button>
-                    </div>
-                </form>
+                <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        </template>
+            <form id="editTaskForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label for="edit_title" class="form-label fw-semibold small text-muted">Tiêu đề công việc</label>
+                        <input type="text" id="edit_title" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit_description" class="form-label fw-semibold small text-muted">Mô tả</label>
+                        <textarea id="edit_description" name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="edit_status" class="form-label fw-semibold small text-muted">Trạng thái</label>
+                            <select id="edit_status" name="status" class="form-select">
+                                <option value="pending">Chờ xử lý</option>
+                                <option value="in_progress">Đang làm</option>
+                                <option value="completed">Hoàn thành</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="edit_due_date" class="form-label fw-semibold small text-muted">Hạn chót</label>
+                            <input type="date" id="edit_due_date" name="due_date" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Cập nhật</button>
+                </div>
+            </form>
+        </div>
     </div>
-</x-modal>
+</div>
+
+<!-- JS helper to open edit modal and fill fields -->
+<script>
+    function openEditTaskModal(task) {
+        // Set form actions
+        document.getElementById('editTaskForm').action = '/tasks/' + task.id;
+        document.getElementById('deleteTaskForm').action = '/tasks/' + task.id;
+        
+        // Populate inputs
+        document.getElementById('edit_title').value = task.title;
+        document.getElementById('edit_description').value = task.description || '';
+        document.getElementById('edit_status').value = task.status;
+        if (task.due_date) {
+            const dateOnly = task.due_date.split(' ')[0].split('T')[0];
+            document.getElementById('edit_due_date').value = dateOnly;
+        } else {
+            document.getElementById('edit_due_date').value = '';
+        }
+        
+        // Show modal using Bootstrap JS API
+        const editModal = new bootstrap.Modal(document.getElementById('editTaskModal'));
+        editModal.show();
+    }
+
+    // Add support for window event listener (used by calendar event clicks)
+    window.addEventListener('open-edit-modal', function(e) {
+        const taskData = e.detail;
+        if (taskData) {
+            openEditTaskModal(taskData);
+        }
+    });
+</script>

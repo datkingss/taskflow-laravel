@@ -1,25 +1,34 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <h4 class="fw-bold text-dark mb-3">Quên mật khẩu?</h4>
+    <div class="mb-4 text-muted small">
+        Nhập địa chỉ email của bạn và chúng tôi sẽ gửi liên kết đặt lại mật khẩu mới cho bạn qua email.
     </div>
 
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    @if (session('status'))
+        <div class="alert alert-success mb-4" role="alert">
+            {{ session('status') }}
+        </div>
+    @endif
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" novalidate>
         @csrf
 
         <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="mb-4">
+            <label for="email" class="form-label fw-semibold text-muted" style="font-size: 0.85rem;">Địa chỉ Email</label>
+            <input id="email" type="email" name="email" class="form-control py-2 @error('email') is-invalid @enderror" value="{{ old('email') }}" required autofocus>
+            @error('email')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        <button type="submit" class="btn btn-primary w-100 py-2.5 fw-bold" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
+            Gửi liên kết đặt lại mật khẩu
+        </button>
+
+        <div class="text-center mt-4">
+            <a href="{{ route('login') }}" class="text-decoration-none small fw-bold text-primary">Quay lại đăng nhập</a>
         </div>
     </form>
 </x-guest-layout>
