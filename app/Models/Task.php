@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Task extends Model
+{
+    use HasFactory;
+
+    // Khai báo các trường cho phép lưu vào Database (Mass Assignment)
+    protected $fillable = [
+        'title',
+        'description',
+        'status',
+        'due_date',
+        'assigned_to',
+        'created_by',
+    ];
+
+    // Khai báo ép kiểu dữ liệu
+    protected $casts = [
+        'due_date' => 'datetime', // Bắt buộc Laravel giữ lại Giờ:Phút:Giây
+    ];
+}
