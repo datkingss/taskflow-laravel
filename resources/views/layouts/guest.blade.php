@@ -13,6 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
+    <!-- Vite Assets for HMR / Live Reload -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -29,7 +32,7 @@
         .auth-logo {
             font-size: 2.2rem;
             font-weight: 800;
-            color: #4f46e5;
+            color: #0d6efd;
             text-decoration: none;
             display: flex;
             align-items: center;

@@ -1,62 +1,78 @@
-Markdown
-# 🚀 TaskFlow - Hệ thống Quản lý Công việc & Cộng tác Nhóm
 
-TaskFlow là một ứng dụng web mạnh mẽ được xây dựng bằng Laravel, giúp cá nhân và tổ chức quản lý dự án, theo dõi tiến độ công việc và cộng tác nhóm một cách trực quan, hiệu quả.
+## Giới thiệu nhanh
 
-## ✨ Tính năng nổi bật
+- Dự án được xây dựng bằng **Laravel** (PHP) - một framework phổ biến để làm web
+- Giao diện sử dụng **Bootstrap** - bộ công cụ thiết kế web của Twitter
+- Dữ liệu được lưu trong **MySQL** - hệ quản trị cơ sở dữ liệu
+- Chạy trên máy cá nhân thông qua **Laragon** hoặc lệnh `php artisan serve`
 
-* **Bảng Kanban (Kanban Board):** Trực quan hóa tiến độ công việc theo các cột trạng thái (Chờ xử lý, Đang làm, Hoàn thành).
-* **Lịch công việc (Calendar):** Tích hợp FullCalendar giúp theo dõi deadline dưới dạng lưới thời gian (Tháng/Tuần).
-* **Quản lý Nhóm (Team Workspace):** * Khởi tạo phòng làm việc cho từng dự án.
-    * Mời thành viên qua Email hoặc xin gia nhập bằng ID nhóm.
-    * Hệ thống phê duyệt/từ chối lời mời chặt chẽ.
-* **Báo cáo & Thống kê (Reports):** Tự động tổng hợp số liệu công việc và hỗ trợ xuất báo cáo ra file Excel (CSV).
-* **Hệ thống Thông báo (Notifications):** Thông báo theo thời gian thực khi có lời mời, phê duyệt nhóm hoặc báo cáo mới.
+---
 
-## 🛠️ Công nghệ sử dụng
+## Cách cài đặt và chạy project
 
-* **Backend:** [Laravel](https://laravel.com/) (PHP)
-* **Frontend:** [Tailwind CSS](https://tailwindcss.com/) & [Alpine.js](https://alpinejs.dev/)
-* **Database:** MySQL
-* **Libraries:** FullCalendar (Giao diện lịch)
+Thực hiện lần lượt từng bước dưới đây trong cửa sổ Terminal (Command Prompt):
 
-## ⚙️ Hướng dẫn cài đặt (Local Development)
+**Bước 1: Tải project về máy**
 
-Làm theo các bước sau để chạy dự án trên máy tính của bạn:
-
-**1. Clone dự án về máy:**
-```bash
-git clone [https://github.com/datkingss/taskflow-laravel.git](https://github.com/datkingss/taskflow-laravel.git)
+```
+git clone https://github.com/datkingss/taskflow-laravel.git
 cd taskflow-laravel
-2. Cài đặt các thư viện cần thiết:
+```
 
-Bash
+**Bước 2: Cài đặt các thư viện cần thiết**
+
+```
 composer install
 npm install
-3. Thiết lập môi trường:
+```
 
-Copy file .env.example thành .env:
+**Bước 3: Tạo file cấu hình môi trường**
 
-Bash
-cp .env.example .env
-Mở file .env và cấu hình kết nối Database (DB_DATABASE, DB_USERNAME, DB_PASSWORD).
-
-Tạo khóa bảo mật cho ứng dụng:
-
-Bash
+```
+copy .env.example .env
 php artisan key:generate
-4. Khởi tạo Cơ sở dữ liệu:
+```
 
-Bash
-php artisan migrate
-5. Khởi động Server:
-Mở 2 cửa sổ Terminal và chạy song song 2 lệnh sau:
+Sau đó mở file `.env` và điền thông tin database:
+- `DB_DATABASE` = tên database (ví dụ: taskflow)
+- `DB_USERNAME` = tên tài khoản MySQL (thường là `root`)
+- `DB_PASSWORD` = mật khẩu MySQL (để trống nếu dùng Laragon)
 
-Bash
+**Bước 4: Tạo bảng dữ liệu và dữ liệu mẫu**
+
+```
+php artisan migrate --seed
+```
+
+**Bước 5: Khởi động ứng dụng**
+
+Mở 2 cửa sổ Terminal, chạy mỗi lệnh trong một cửa sổ:
+
+```
 php artisan serve
-Bash
-npm run dev
-Ứng dụng sẽ hoạt động tại địa chỉ: http://localhost:8000
+```
 
-👨‍💻 Tác giả
-Hoàng Quảng Đạt - Fullstack Developer
+```
+npm run dev
+```
+
+Truy cập ứng dụng tại địa chỉ: **http://localhost:8000**
+
+---
+
+## Tài khoản đăng nhập mẫu
+
+| Vai trò | Email | Mật khẩu |
+|---|---|---|
+| Quản trị viên (Admin) | admin@example.com | password |
+| Người dùng thường | (tài khoản ngẫu nhiên từ seeder) | password |
+
+Để xem danh sách tài khoản người dùng thường, đăng nhập bằng tài khoản Admin và vào mục **Quản lý Người dùng**.
+
+---
+
+
+Xem thêm tài liệu chi tiết trong thư mục `docs/`:
+- `docs/CHUC_NANG.md` - Mô tả chi tiết từng tính năng
+- `docs/DATABASE.md` - Mô tả cơ sở dữ liệu
+

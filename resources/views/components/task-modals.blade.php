@@ -34,7 +34,7 @@
                 </div>
                 <div class="modal-footer bg-light border-0">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-                    <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Lưu công việc</button>
+                    <button type="submit" class="btn btn-primary">Lưu công việc</button>
                 </div>
             </div>
         </form>
@@ -47,6 +47,7 @@
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-light">
                 <h5 class="modal-title fw-bold text-dark" id="editTaskModalLabel">Chi tiết công việc</h5>
+                @if(auth()->check() && auth()->user()->role === 'admin')
                 <div class="d-flex align-items-center gap-2 ms-auto me-2">
                     <!-- Delete Form inside header -->
                     <form id="deleteTaskForm" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');">
@@ -57,6 +58,7 @@
                         </button>
                     </form>
                 </div>
+                @endif
                 <button type="button" class="btn-close ms-0" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="editTaskForm" method="POST">
@@ -65,11 +67,11 @@
                 <div class="modal-body p-4">
                     <div class="mb-3">
                         <label for="edit_title" class="form-label fw-semibold small text-muted">Tiêu đề công việc</label>
-                        <input type="text" id="edit_title" name="title" class="form-control" required>
+                        <input type="text" id="edit_title" name="title" class="form-control" required @if(auth()->user()->role !== 'admin') readonly @endif>
                     </div>
                     <div class="mb-3">
                         <label for="edit_description" class="form-label fw-semibold small text-muted">Mô tả</label>
-                        <textarea id="edit_description" name="description" class="form-control" rows="3"></textarea>
+                        <textarea id="edit_description" name="description" class="form-control" rows="3" @if(auth()->user()->role !== 'admin') readonly @endif></textarea>
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
@@ -82,13 +84,13 @@
                         </div>
                         <div class="col-md-6">
                             <label for="edit_due_date" class="form-label fw-semibold small text-muted">Hạn chót</label>
-                            <input type="date" id="edit_due_date" name="due_date" class="form-control">
+                            <input type="date" id="edit_due_date" name="due_date" class="form-control" @if(auth()->user()->role !== 'admin') readonly disabled @endif>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer bg-light border-0">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Cập nhật</button>
+                    <button type="submit" class="btn btn-primary">Cập nhật</button>
                 </div>
             </form>
         </div>
@@ -98,9 +100,11 @@
 <!-- JS helper to open edit modal and fill fields -->
 <script>
     function openEditTaskModal(task) {
-        // Set form actions
         document.getElementById('editTaskForm').action = '/tasks/' + task.id;
-        document.getElementById('deleteTaskForm').action = '/tasks/' + task.id;
+        const deleteForm = document.getElementById('deleteTaskForm');
+        if (deleteForm) {
+            deleteForm.action = '/tasks/' + task.id;
+        }
         
         // Populate inputs
         document.getElementById('edit_title').value = task.title;

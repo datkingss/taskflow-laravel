@@ -44,8 +44,8 @@
         </div>
 
         <div class="row g-4">
-            <!-- Left Side: Tasks Board & Recent Activities -->
-            <div class="col-lg-8 d-flex flex-column gap-4">
+            <!-- Full Width Content: Tasks Board & Recent Activities -->
+            <div class="col-lg-12 d-flex flex-column gap-4">
                 
                 <!-- Mini Kanban Board -->
                 <div class="card shadow-sm border-0 rounded-3 p-4">
@@ -160,92 +160,11 @@
                 </div>
             </div>
 
-            <!-- Right Side: Charts -->
-            <div class="col-lg-4 d-flex flex-column gap-4">
-                <!-- Weekly Chart -->
-                <div class="card shadow-sm border-0 rounded-3 p-4">
-                    <h5 class="fw-bold text-dark mb-3">Tiến độ theo tuần</h5>
-                    <div style="height: 200px; position: relative;">
-                        <canvas id="weeklyChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Distribution Chart -->
-                <div class="card shadow-sm border-0 rounded-3 p-4">
-                    <h5 class="fw-bold text-dark mb-3">Thống kê trạng thái công việc</h5>
-                    <div style="height: 200px; position: relative;" class="d-flex justify-content-center">
-                        <canvas id="distributionChart"></canvas>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 
     <!-- Modals -->
     <x-task-modals />
 
-    <!-- ChartJS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Weekly Chart
-            const ctxBar = document.getElementById('weeklyChart').getContext('2d');
-            new Chart(ctxBar, {
-                type: 'bar',
-                data: {
-                    labels: @json($chartBarLabels),
-                    datasets: [{
-                        label: 'Task mới',
-                        data: @json($chartBarData),
-                        backgroundColor: '#4f46e5',
-                        borderRadius: 4,
-                        barThickness: 16
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true, ticks: { stepSize: 1 } },
-                        x: { grid: { display: false } }
-                    }
-                }
-            });
-
-            // Distribution Chart
-            const ctxPie = document.getElementById('distributionChart').getContext('2d');
-            new Chart(ctxPie, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Hoàn thành', 'Đang làm', 'Quá hạn'],
-                    datasets: [{
-                        data: @json($chartPieData), 
-                        backgroundColor: ['#198754', '#ffc107', '#dc3545'],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '75%', 
-                    plugins: {
-                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    let value = context.raw || 0;
-                                    let total = context.chart._metasets[context.datasetIndex].total;
-                                    let percentage = total > 0 ? Math.round((value / total) * 100) + '%' : '0%';
-                                    return `${label}: ${value} task (${percentage})`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        });
-    </script>
 </x-app-layout>

@@ -18,7 +18,7 @@
             background-color: #f8f9fc;
         }
         .hero {
-            background: linear-gradient(135deg, #1e1e2d 0%, #11111d 100%);
+            background-color: #0f172a;
             color: #ffffff;
             padding: 100px 0 80px;
         }
@@ -36,8 +36,8 @@
             width: 48px;
             height: 48px;
             border-radius: 10px;
-            background-color: rgba(79, 70, 229, 0.1);
-            color: #4f46e5;
+            background-color: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -49,10 +49,10 @@
 <body>
 
     <!-- Header Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3" style="background-color: #1e1e2d !important;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3" style="background-color: #0f172a !important;">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center fw-bold fs-3" href="/">
-                <div class="bg-primary rounded-3 text-white d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; background-color: #4f46e5 !important;">
+                <div class="bg-primary rounded-3 text-white d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; background-color: #0d6efd !important;">
                     <i class="fa-solid fa-list-check fs-6"></i>
                 </div>
                 <span>TaskFlow</span>
@@ -65,7 +65,7 @@
                     @else
                         <a href="{{ route('login') }}" class="btn btn-outline-light me-2 fw-semibold">Đăng nhập</a>
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-primary fw-semibold" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Đăng ký</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary fw-semibold">Đăng ký</a>
                         @endif
                     @endauth
                 @endif
@@ -78,16 +78,16 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8 col-md-10">
-                    <span class="badge bg-primary px-3 py-2 rounded-pill text-uppercase mb-3" style="background-color: #4f46e5 !important;">Nền tảng cộng tác nhóm trực quan</span>
+                    <span class="badge bg-primary px-3 py-2 rounded-pill text-uppercase mb-3">Nền tảng cộng tác nhóm trực quan</span>
                     <h1 class="display-4 fw-extrabold text-white mb-4">Quản lý Công việc Dự án Dễ dàng & Hiệu quả hơn</h1>
                     <p class="lead text-muted-light mb-5" style="color: #a2a3b7;">
                         TaskFlow giúp đội ngũ của bạn cộng tác, tổ chức nhiệm vụ dưới dạng bảng Kanban trực quan, theo dõi deadline trên lịch biểu và lập báo cáo nhanh chóng.
                     </p>
                     <div class="d-flex justify-content-center gap-3">
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="btn btn-primary btn-lg px-4 py-3 fw-bold" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Quay lại Bảng Điều Khiển</a>
+                            <a href="{{ url('/dashboard') }}" class="btn btn-primary btn-lg px-4 py-3 fw-bold">Quay lại Bảng Điều Khiển</a>
                         @else
-                            <a href="{{ route('register') }}" class="btn btn-primary btn-lg px-4 py-3 fw-bold" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Bắt đầu Miễn phí</a>
+                            <a href="{{ route('register') }}" class="btn btn-primary btn-lg px-4 py-3 fw-bold">Bắt đầu Miễn phí</a>
                             <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg px-4 py-3 fw-bold">Xem bản Demo</a>
                         @endauth
                     </div>

@@ -20,12 +20,9 @@
                                 <i class="fa-solid fa-xmark"></i>
                             </a>
                         @endif
-                        <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">Tìm</button>
+                        <button type="submit" class="btn btn-primary">Tìm</button>
                     </div>
                 </form>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTaskModal" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
-                    <i class="fa-solid fa-plus me-1"></i> Thêm công việc
-                </button>
             </div>
         </div>
 
@@ -39,17 +36,7 @@
                             <h6 class="fw-bold text-muted mb-0 small text-uppercase">Chờ xử lý</h6>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            @if($pendingTasks->count() > 0)
-                                <form action="{{ route('tasks.clearStatus') }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa toàn bộ công việc trong cột Chờ xử lý?');" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="status" value="pending">
-                                    <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa tất cả trong cột này">
-                                        <i class="fa-solid fa-trash-can fs-6"></i>
-                                    </button>
-                                </form>
-                            @endif
-                            <span class="badge bg-secondary rounded-pill">{{ $pendingTasks->count() }}</span>
+                            <span class="badge bg-secondary rounded-pill">{{ $pendingTasks->total() }}</span>
                         </div>
                     </div>
                     <div class="card-body p-3 overflow-y-auto" style="max-height: 600px;">
@@ -58,13 +45,6 @@
                                  onclick="openEditTaskModal({{ json_encode($task) }})" style="transition: transform 0.2s;">
                                 <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
                                     <h6 class="mb-0 text-dark fw-semibold" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');" class="d-inline" onclick="event.stopPropagation();">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa công việc">
-                                            <i class="fa-regular fa-trash-can"></i>
-                                        </button>
-                                    </form>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <span class="badge bg-primary-subtle text-primary" style="font-size: 0.65rem;">Task</span>
@@ -77,6 +57,12 @@
                         @empty
                             <div class="text-center text-muted py-5 small border-2 border-dashed border-secondary border-opacity-10 rounded-3">Chưa có công việc nào</div>
                         @endforelse
+
+                        @if($pendingTasks->hasPages())
+                            <div class="mt-2 d-flex justify-content-center">
+                                {{ $pendingTasks->links('pagination::simple-bootstrap-5') }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -90,17 +76,7 @@
                             <h6 class="fw-bold text-muted mb-0 small text-uppercase">Đang làm</h6>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            @if($inProgressTasks->count() > 0)
-                                <form action="{{ route('tasks.clearStatus') }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa toàn bộ công việc trong cột Đang làm?');" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="status" value="in_progress">
-                                    <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa tất cả trong cột này">
-                                        <i class="fa-solid fa-trash-can fs-6"></i>
-                                    </button>
-                                </form>
-                            @endif
-                            <span class="badge bg-warning rounded-pill">{{ $inProgressTasks->count() }}</span>
+                            <span class="badge bg-warning rounded-pill">{{ $inProgressTasks->total() }}</span>
                         </div>
                     </div>
                     <div class="card-body p-3 overflow-y-auto" style="max-height: 600px;">
@@ -109,13 +85,6 @@
                                  onclick="openEditTaskModal({{ json_encode($task) }})">
                                 <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
                                     <h6 class="mb-0 text-dark fw-semibold" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');" class="d-inline" onclick="event.stopPropagation();">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa công việc">
-                                            <i class="fa-regular fa-trash-can"></i>
-                                        </button>
-                                    </form>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <span class="badge bg-warning-subtle text-warning" style="font-size: 0.65rem;">Task</span>
@@ -128,6 +97,12 @@
                         @empty
                             <div class="text-center text-muted py-5 small border-2 border-dashed border-secondary border-opacity-10 rounded-3">Chưa có công việc nào</div>
                         @endforelse
+
+                        @if($inProgressTasks->hasPages())
+                            <div class="mt-2 d-flex justify-content-center">
+                                {{ $inProgressTasks->links('pagination::simple-bootstrap-5') }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -141,17 +116,7 @@
                             <h6 class="fw-bold text-muted mb-0 small text-uppercase">Hoàn thành</h6>
                         </div>
                         <div class="d-flex align-items-center gap-2">
-                            @if($completedTasks->count() > 0)
-                                <form action="{{ route('tasks.clearStatus') }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa toàn bộ công việc trong cột Hoàn thành?');" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="status" value="completed">
-                                    <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa tất cả trong cột này">
-                                        <i class="fa-solid fa-trash-can fs-6"></i>
-                                    </button>
-                                </form>
-                            @endif
-                            <span class="badge bg-success rounded-pill">{{ $completedTasks->count() }}</span>
+                            <span class="badge bg-success rounded-pill">{{ $completedTasks->total() }}</span>
                         </div>
                     </div>
                     <div class="card-body p-3 overflow-y-auto" style="max-height: 600px;">
@@ -160,13 +125,6 @@
                                  onclick="openEditTaskModal({{ json_encode($task) }})">
                                 <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
                                     <h6 class="mb-0 text-dark fw-semibold text-decoration-line-through" style="font-size: 0.85rem; line-height: 1.4;">{{ $task->title }}</h6>
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa công việc này?');" class="d-inline" onclick="event.stopPropagation();">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-link text-danger p-0 border-0 bg-transparent" title="Xóa công việc">
-                                            <i class="fa-regular fa-trash-can"></i>
-                                        </button>
-                                    </form>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mt-2">
                                     <span class="badge bg-success-subtle text-success" style="font-size: 0.65rem;">Done</span>
@@ -179,6 +137,12 @@
                         @empty
                             <div class="text-center text-muted py-5 small border-2 border-dashed border-secondary border-opacity-10 rounded-3">Chưa có công việc nào</div>
                         @endforelse
+
+                        @if($completedTasks->hasPages())
+                            <div class="mt-2 d-flex justify-content-center">
+                                {{ $completedTasks->links('pagination::simple-bootstrap-5') }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

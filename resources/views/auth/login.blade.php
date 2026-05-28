@@ -30,9 +30,14 @@
                     </a>
                 @endif
             </div>
-            <input id="password" type="password" name="password" class="form-control py-2 @error('password') is-invalid @enderror" required autocomplete="current-password">
+            <div class="position-relative">
+                <input id="password" type="password" name="password" class="form-control py-2 pe-5 @error('password') is-invalid @enderror" required autocomplete="current-password">
+                <button type="button" class="btn border-0 position-absolute end-0 top-50 translate-middle-y text-muted" id="togglePassword" style="z-index: 10;">
+                    <i class="fa-regular fa-eye" id="passwordIcon"></i>
+                </button>
+            </div>
             @error('password')
-                <div class="invalid-feedback">{{ $message }}</div>
+                <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror
         </div>
 
@@ -54,4 +59,20 @@
             <a href="{{ route('register') }}" class="text-decoration-none small fw-bold text-primary ms-1">Đăng ký ngay</a>
         </div>
     </form>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('passwordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            }
+        });
+    </script>
 </x-guest-layout>

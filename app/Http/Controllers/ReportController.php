@@ -13,7 +13,7 @@ class ReportController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $query = Task::where('created_by', Auth::id());
+        $query = Task::where('assigned_to', Auth::id());
 
         if ($search) {
             $query->where(function($q) use ($search) {
@@ -23,7 +23,7 @@ class ReportController extends Controller
         }
 
         // Lấy tất cả task của user để tính toán số liệu tĩnh đầy đủ
-        $allTasks = Task::where('created_by', Auth::id())->get();
+        $allTasks = Task::where('assigned_to', Auth::id())->get();
         
         // Tính toán số liệu tổng quan
         $stats = [
@@ -42,7 +42,7 @@ class ReportController extends Controller
     // 2. Chức năng Xuất file CSV (Đọc được bằng Excel)
     public function exportCsv()
     {
-        $tasks = Task::where('created_by', Auth::id())->latest()->get();
+        $tasks = Task::where('assigned_to', Auth::id())->latest()->get();
         $filename = "bao_cao_cong_viec_" . date('Ymd_His') . ".csv";
 
         $headers = [
@@ -71,8 +71,8 @@ class ReportController extends Controller
                     $task->id,
                     $task->title,
                     $status,
-                    $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i') : 'Không có',
-                    $task->created_at->format('d/m/Y H:i')
+                    $task->due_date ? ' ' . \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') : 'Không có',
+                    ' ' . $task->created_at->format('d/m/Y')
                 ];
                 fputcsv($file, $row);
             }

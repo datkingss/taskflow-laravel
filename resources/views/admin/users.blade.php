@@ -36,7 +36,7 @@
                                 <i class="fa-solid fa-xmark"></i>
                             </a>
                         @endif
-                        <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
+                        <button type="submit" class="btn btn-primary">
                             Tìm kiếm
                         </button>
                     </div>
@@ -93,7 +93,6 @@
                                                 </button>
                                             </form>
                                         @else
-                                            <span class="text-muted small">Không được phép</span>
                                         @endif
                                     </td>
                                 </tr>

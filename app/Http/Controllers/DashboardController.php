@@ -11,14 +11,17 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $userId = Auth::id();
+
         // 1. Lấy thống kê số lượng
-        $totalTasks = Task::count();
-        $inProgressTasks = Task::where('status', 'in_progress')->count();
-        $completedTasks = Task::where('status', 'completed')->count();
-        $pendingTasksCount = Task::where('status', 'pending')->count();
+        $totalTasks = Task::where('assigned_to', $userId)->count();
+        $inProgressTasks = Task::where('assigned_to', $userId)->where('status', 'in_progress')->count();
+        $completedTasks = Task::where('assigned_to', $userId)->where('status', 'completed')->count();
+        $pendingTasksCount = Task::where('assigned_to', $userId)->where('status', 'pending')->count();
         
         // Task quá hạn (hạn chót nhỏ hơn hôm nay và chưa hoàn thành)
-        $overdueTasks = Task::where('due_date', '<', Carbon::now())
+        $overdueTasks = Task::where('assigned_to', $userId)
+                            ->where('due_date', '<', Carbon::now())
                             ->where('status', '!=', 'completed')
                             ->count();
 
@@ -27,9 +30,9 @@ class DashboardController extends Controller
         $completedPercent = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100, 1) : 0;
 
         // Lấy danh sách task cho bảng Kanban (chỉ lấy 2 task mới nhất cho đẹp giao diện)
-        $pendingTasksList = Task::where('status', 'pending')->latest()->take(2)->get();
-        $inProgressTasksList = Task::where('status', 'in_progress')->latest()->take(2)->get();
-        $completedTasksList = Task::where('status', 'completed')->latest()->take(2)->get();
+        $pendingTasksList = Task::where('assigned_to', $userId)->where('status', 'pending')->latest()->take(2)->get();
+        $inProgressTasksList = Task::where('assigned_to', $userId)->where('status', 'in_progress')->latest()->take(2)->get();
+        $completedTasksList = Task::where('assigned_to', $userId)->where('status', 'completed')->latest()->take(2)->get();
 
         // ==========================================
         // 3. DỮ LIỆU MỚI CHO BIỂU ĐỒ (CHART.JS)
@@ -47,8 +50,8 @@ class DashboardController extends Controller
             $date = Carbon::now()->subDays($i);
             // Lấy tên ngày (VD: 28/05)
             $chartBarLabels[] = $date->format('d/m'); 
-            // Đếm số task tạo trong ngày đó
-            $chartBarData[] = Task::whereDate('created_at', $date->toDateString())->count();
+            // Đếm số task được gán tạo trong ngày đó
+            $chartBarData[] = Task::where('assigned_to', $userId)->whereDate('created_at', $date->toDateString())->count();
         }
 
         // 4. LẤY HOẠT ĐỘNG GẦN ĐÂY (5 thông báo mới nhất)

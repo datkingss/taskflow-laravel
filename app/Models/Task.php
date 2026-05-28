@@ -23,4 +23,20 @@ class Task extends Model
     protected $casts = [
         'due_date' => 'datetime', // Bắt buộc Laravel giữ lại Giờ:Phút:Giây
     ];
+
+    /**
+     * Get the user who created the task.
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Get the user who is assigned to perform the task.
+     */
+    public function assignedUser()
+    {
+        return $this->belongsTo(User::class, 'assigned_to');
+    }
 }
