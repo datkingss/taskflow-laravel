@@ -62,12 +62,13 @@ Truy cập ứng dụng tại địa chỉ: **http://localhost:8000**
 
 ## Tài khoản đăng nhập mẫu
 
-| Vai trò | Email | Mật khẩu |
-|---|---|---|
-| Quản trị viên (Admin) | admin@example.com | password |
-| Người dùng thường | (tài khoản ngẫu nhiên từ seeder) | password |
-
-Để xem danh sách tài khoản người dùng thường, đăng nhập bằng tài khoản Admin và vào mục **Quản lý Người dùng**.
+| Vai trò | Họ tên | Email | Mật khẩu |
+|---|---|---|---|
+| Quản trị viên (Admin) | Admin User | admin@example.com | password |
+| Người dùng thường | Nguyen Van Thanh | xuanpq359@gmail.com | 11111111 |
+| Người dùng thường | Dat | dat@gmail.com | 11111111 |
+| Người dùng thường | Nghia | nghia@gmail.com | 11111111 |
+| Người dùng thường | Ngoc Toan | ngoctoan@gmail.com | 11111111 |
 
 ---
 
