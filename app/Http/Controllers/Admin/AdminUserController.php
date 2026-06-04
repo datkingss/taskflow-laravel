@@ -32,6 +32,75 @@ class AdminUserController extends Controller
     }
 
     /**
+     * Store a newly created user.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6|max:255',
+            'role' => 'required|in:admin,user',
+        ], [
+            'name.required' => 'Họ tên là bắt buộc.',
+            'email.required' => 'Email là bắt buộc.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email này đã được sử dụng.',
+            'password.required' => 'Mật khẩu là bắt buộc.',
+            'password.min' => 'Mật khẩu tối thiểu 6 ký tự.',
+            'role.required' => 'Vai trò là bắt buộc.',
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+            'role' => $validated['role'],
+        ]);
+
+        return redirect()->back()->with('success', 'Đã tạo thành viên mới thành công!');
+    }
+
+    /**
+     * Update the specified user.
+     */
+    public function update(Request $request, User $user)
+    {
+        // Không cho sửa admin gốc (id = 1)
+        if ($user->id === 1 && Auth::id() !== 1) {
+            return redirect()->back()->with('error', 'Không thể sửa tài khoản Admin gốc của hệ thống!');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'required|in:admin,user',
+            'password' => 'nullable|min:6|max:255',
+        ], [
+            'name.required' => 'Họ tên là bắt buộc.',
+            'email.required' => 'Email là bắt buộc.',
+            'email.email' => 'Email không đúng định dạng.',
+            'email.unique' => 'Email này đã được sử dụng.',
+            'role.required' => 'Vai trò là bắt buộc.',
+            'password.min' => 'Mật khẩu tối thiểu 6 ký tự.',
+        ]);
+
+        $updateData = [
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'role' => $validated['role'],
+        ];
+
+        if (!empty($validated['password'])) {
+            $updateData['password'] = \Illuminate\Support\Facades\Hash::make($validated['password']);
+        }
+
+        $user->update($updateData);
+
+        return redirect()->back()->with('success', 'Đã cập nhật thành viên thành công!');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy(User $user)

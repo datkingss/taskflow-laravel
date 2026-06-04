@@ -50,6 +50,8 @@ Route::middleware('auth')->group(function () {
     // Các routes dành riêng cho Quản trị viên (Admin)
     Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/users', [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('users.index');
+        Route::post('/users', [\App\Http\Controllers\Admin\AdminUserController::class, 'store'])->name('users.store');
+        Route::put('/users/{user}', [\App\Http\Controllers\Admin\AdminUserController::class, 'update'])->name('users.update');
         Route::delete('/users/{user}', [\App\Http\Controllers\Admin\AdminUserController::class, 'destroy'])->name('users.destroy');
         
         // Quản lý công việc cho Admin
