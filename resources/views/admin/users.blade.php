@@ -51,6 +51,7 @@
             
             <div class="card-body p-0">
                 <div class="table-responsive">
+                    <small class="text-muted d-md-none px-3 pt-2 d-block"><i class="fa-solid fa-arrow-left me-1"></i> Vuốt sang trái để xem thêm</small>
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em;">
                             <tr>
@@ -156,8 +157,12 @@
                             <input type="email" id="create_email" name="email" class="form-control" placeholder="VD: nguyenvana@gmail.com" required>
                         </div>
                         <div class="mb-3">
-                            <label for="create_password" class="form-label fw-semibold small text-muted">Mật khẩu</label>
-                            <input type="password" id="create_password" name="password" class="form-control" placeholder="Tối thiểu 6 ký tự" required>
+                            <label for="create_password" class="form-label fw-semibold small text-muted">Mật khẩu (tối thiểu 8 ký tự)</label>
+                            <input type="password" id="create_password" name="password" class="form-control" placeholder="Tối thiểu 8 ký tự" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="create_password_confirmation" class="form-label fw-semibold small text-muted">Xác nhận mật khẩu</label>
+                            <input type="password" id="create_password_confirmation" name="password_confirmation" class="form-control" placeholder="Nhập lại mật khẩu" required>
                         </div>
                         <div class="mb-3">
                             <label for="create_role" class="form-label fw-semibold small text-muted">Vai trò</label>

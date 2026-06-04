@@ -37,17 +37,22 @@ class AdminUserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|max:255',
-            'role' => 'required|in:admin,user',
+            'name' => ['required', 'string', 'max:255', 'regex:/^[\pL\s]+$/u'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'confirmed', 'min:8'],
+            'role' => ['required', 'in:admin,user'],
         ], [
-            'name.required' => 'Họ tên là bắt buộc.',
-            'email.required' => 'Email là bắt buộc.',
-            'email.email' => 'Email không đúng định dạng.',
-            'email.unique' => 'Email này đã được sử dụng.',
-            'password.required' => 'Mật khẩu là bắt buộc.',
-            'password.min' => 'Mật khẩu tối thiểu 6 ký tự.',
+            'name.required' => 'Họ và tên bắt buộc phải nhập.',
+            'name.string' => 'Họ và tên phải là chuỗi chữ.',
+            'name.max' => 'Họ và tên không được vượt quá 255 ký tự.',
+            'name.regex' => 'Họ và tên chỉ bao gồm chữ cái và khoảng trắng.',
+            'email.required' => 'Email bắt buộc phải nhập.',
+            'email.email' => 'Email phải đúng định dạng (example@domain.com).',
+            'email.unique' => 'Email này đã tồn tại, vui lòng dùng email khác.',
+            'email.max' => 'Email không được vượt quá 255 ký tự.',
+            'password.required' => 'Mật khẩu bắt buộc phải nhập.',
+            'password.min' => 'Mật khẩu phải tối thiểu 8 ký tự.',
+            'password.confirmed' => 'Mật khẩu xác nhận không khớp.',
             'role.required' => 'Vai trò là bắt buộc.',
         ]);
 

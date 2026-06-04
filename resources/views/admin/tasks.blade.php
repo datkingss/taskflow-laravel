@@ -1,18 +1,18 @@
     <x-app-layout>
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center w-100">
-            <span>Quản lý Công việc Hệ thống</span>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#adminCreateTaskModal">
-                <i class="fa-solid fa-plus me-1"></i> Tạo công việc
+            <span><span class="d-none d-sm-inline">Quản lý </span>Công việc</span>
+            <button type="button" class="btn btn-primary btn-sm text-nowrap" data-bs-toggle="modal" data-bs-target="#adminCreateTaskModal">
+                <i class="fa-solid fa-plus"></i> <span class="d-none d-sm-inline">Tạo</span>
             </button>
         </div>
     </x-slot>
 
     <div class="container-fluid">
         <!-- Stats Row -->
-        <div class="row g-2 g-md-3 mb-4">
+        <div class="row g-2 mb-4 row-cols-2 row-cols-sm-3 row-cols-md-5">
             <!-- Total Tasks -->
-            <div class="col-6 col-sm-4 col-md">
+            <div class="col">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
                     <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <!-- Pending -->
-            <div class="col-6 col-sm-4 col-md">
+            <div class="col">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
                     <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -40,7 +40,7 @@
                 </div>
             </div>
             <!-- In Progress -->
-            <div class="col-6 col-sm-4 col-md">
+            <div class="col">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
                     <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -54,7 +54,7 @@
                 </div>
             </div>
             <!-- Completed -->
-            <div class="col-6 col-sm-4 col-md">
+            <div class="col">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
                     <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <!-- Overdue -->
-            <div class="col-6 col-sm-4 col-md">
+            <div class="col">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
                     <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
@@ -87,12 +87,12 @@
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header bg-white py-3">
                 <form action="{{ route('admin.tasks.index') }}" method="GET" class="row g-2 align-items-end">
-                    <div class="col-12 col-sm-6 col-md-3">
+                    <div class="col-12 col-md-4">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0">
                                 <i class="fa-solid fa-magnifying-glass text-muted"></i>
                             </span>
-                            <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm tiêu đề, email, tên..." value="{{ $search ?? '' }}">
+                            <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm kiếm..." value="{{ $search ?? '' }}">
                         </div>
                     </div>
                     
@@ -112,9 +112,9 @@
                         </select>
                     </div>
 
-                    <div class="col-12 col-sm-6 col-md-5 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary text-nowrap">
-                            <i class="fa-solid fa-filter me-1"></i> Lọc
+                    <div class="col-12 col-md-2 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary text-nowrap w-100">
+                            <i class="fa-solid fa-filter"></i> Lọc
                         </button>
                         @if($search || $status || $filter)
                             <a href="{{ route('admin.tasks.index') }}" class="btn btn-outline-secondary text-nowrap">
@@ -127,6 +127,7 @@
             
             <div class="card-body p-0">
                 <div class="table-responsive">
+                    <small class="text-muted d-md-none px-3 pt-2 d-block"><i class="fa-solid fa-arrow-left me-1"></i> Vuốt sang trái để xem thêm</small>
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em;">
                             <tr>
