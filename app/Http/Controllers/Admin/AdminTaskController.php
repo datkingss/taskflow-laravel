@@ -77,11 +77,23 @@ class AdminTaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
             'assigned_to' => 'required|exists:users,id', // Admin bắt buộc gán việc cho một user
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ], [
             'title.required' => 'Tiêu đề công việc là bắt buộc.',
             'assigned_to.required' => 'Bạn phải chọn người thực hiện công việc này.',
             'assigned_to.exists' => 'Thành viên được chọn không hợp lệ.',
         ]);
+
+        // Xử lý upload file đính kèm
+        $attachmentPath = null;
+        $attachmentName = null;
+        $attachmentType = null;
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $attachmentPath = $file->store('task_attachments', 'public');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentType = $file->getClientMimeType();
+        }
 
         Task::create([
             'title' => $validated['title'],
@@ -90,6 +102,9 @@ class AdminTaskController extends Controller
             'due_date' => $validated['due_date'],
             'created_by' => Auth::id(),
             'assigned_to' => $validated['assigned_to'],
+            'attachment_path' => $attachmentPath,
+            'attachment_name' => $attachmentName,
+            'attachment_type' => $attachmentType,
         ]);
 
         return redirect()->back()->with('success', 'Đã tạo và giao công việc mới thành công!');
@@ -106,13 +121,26 @@ class AdminTaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
             'assigned_to' => 'required|exists:users,id',
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ], [
             'title.required' => 'Tiêu đề công việc là bắt buộc.',
             'assigned_to.required' => 'Bạn phải chọn người thực hiện công việc này.',
             'assigned_to.exists' => 'Thành viên được chọn không hợp lệ.',
         ]);
 
-        $task->update($validated);
+        // Xử lý upload file đính kèm (nếu có file mới)
+        $updateData = $validated;
+        if ($request->hasFile('attachment')) {
+            if ($task->attachment_path && \Storage::disk('public')->exists($task->attachment_path)) {
+                \Storage::disk('public')->delete($task->attachment_path);
+            }
+            $file = $request->file('attachment');
+            $updateData['attachment_path'] = $file->store('task_attachments', 'public');
+            $updateData['attachment_name'] = $file->getClientOriginalName();
+            $updateData['attachment_type'] = $file->getClientMimeType();
+        }
+
+        $task->update($updateData);
 
         return redirect()->back()->with('success', 'Đã cập nhật công việc thành công!');
     }

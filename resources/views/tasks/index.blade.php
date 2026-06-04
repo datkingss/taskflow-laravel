@@ -8,8 +8,8 @@
             <h4 class="fw-bold text-dark mb-0">Tất cả công việc</h4>
             
             <!-- Search and Action Buttons -->
-            <div class="d-flex flex-column flex-sm-row gap-2">
-                <form action="{{ route('tasks.index') }}" method="GET" class="d-flex" style="max-width: 320px;">
+            <div class="d-flex flex-column flex-sm-row gap-2 w-100 justify-content-end">
+                <form action="{{ route('tasks.index') }}" method="GET" class="d-flex w-100" style="max-width: 320px;">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0">
                             <i class="fa-solid fa-magnifying-glass text-muted"></i>
@@ -60,7 +60,7 @@
 
                         @if($pendingTasks->hasPages())
                             <div class="mt-2 d-flex justify-content-center">
-                                {{ $pendingTasks->links('pagination::simple-bootstrap-5') }}
+                                {{ $pendingTasks->links('pagination::bootstrap-5') }}
                             </div>
                         @endif
                     </div>
@@ -100,7 +100,7 @@
 
                         @if($inProgressTasks->hasPages())
                             <div class="mt-2 d-flex justify-content-center">
-                                {{ $inProgressTasks->links('pagination::simple-bootstrap-5') }}
+                                {{ $inProgressTasks->links('pagination::bootstrap-5') }}
                             </div>
                         @endif
                     </div>
@@ -140,7 +140,7 @@
 
                         @if($completedTasks->hasPages())
                             <div class="mt-2 d-flex justify-content-center">
-                                {{ $completedTasks->links('pagination::simple-bootstrap-5') }}
+                                {{ $completedTasks->links('pagination::bootstrap-5') }}
                             </div>
                         @endif
                     </div>

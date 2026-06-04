@@ -45,9 +45,9 @@
             <div class="card-header bg-white py-3 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
                 <h5 class="mb-0 text-dark fw-bold">Chi tiết công việc của tôi</h5>
                 
-                <div class="d-flex flex-column flex-sm-row gap-2">
+                <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-md-auto">
                     <!-- Search Form -->
-                    <form action="{{ route('reports.index') }}" method="GET" class="d-flex" style="max-width: 320px;">
+                    <form action="{{ route('reports.index') }}" method="GET" class="flex-grow-1" style="min-width: 0;">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0">
                                 <i class="fa-solid fa-magnifying-glass text-muted"></i>
@@ -58,15 +58,18 @@
                                     <i class="fa-solid fa-xmark"></i>
                                 </a>
                             @endif
-                            <button type="submit" class="btn btn-primary" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
-                                Tìm
+                            <button type="submit" class="btn btn-primary text-nowrap" style="background-color: #4f46e5 !important; border-color: #4f46e5 !important;">
+                                <i class="fa-solid fa-magnifying-glass d-md-none"></i>
+                                <span class="d-none d-md-inline">Tìm</span>
                             </button>
                         </div>
                     </form>
 
                     <!-- Export Excel/CSV Button -->
-                    <a href="{{ route('reports.export') }}" class="btn btn-success d-flex align-items-center justify-content-center">
-                        <i class="fa-solid fa-file-excel me-2"></i> Xuất Excel (CSV)
+                    <a href="{{ route('reports.export') }}" class="btn btn-success d-flex align-items-center justify-content-center text-nowrap flex-shrink-0">
+                        <i class="fa-solid fa-file-excel me-1 me-md-2"></i>
+                        <span class="d-none d-sm-inline">Xuất Excel</span>
+                        <span class="d-sm-none">Excel</span>
                     </a>
                 </div>
             </div>

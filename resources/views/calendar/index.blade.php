@@ -29,7 +29,23 @@
                     today: 'Hôm nay',
                     month: 'Tháng',
                     week: 'Tuần',
-                    list: 'Danh sách'
+                    list: 'DS'
+                },
+                // Responsive: trên mobile chuy?n sang ch? ?? danh sách t? ??ng
+                windowResize: function(view) {
+                    if (window.innerWidth < 768) {
+                        calendar.changeView('listMonth');
+                    } else {
+                        calendar.changeView('dayGridMonth');
+                    }
+                },
+                views: {
+                    dayGridMonth: {
+                        titleFormat: { year: 'numeric', month: 'long' }
+                    },
+                    dayGridWeek: {
+                        titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+                    }
                 },
                 
                 displayEventTime: false, 

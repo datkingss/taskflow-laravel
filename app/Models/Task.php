@@ -17,6 +17,9 @@ class Task extends Model
         'due_date',
         'assigned_to',
         'created_by',
+        'attachment_path',
+        'attachment_name',
+        'attachment_type',
     ];
 
     // Khai báo ép kiểu dữ liệu

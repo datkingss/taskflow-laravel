@@ -25,19 +25,20 @@
                 <h5 class="mb-0 text-dark fw-bold">Danh sách người dùng</h5>
                 
                 <!-- Search Form -->
-                <form action="{{ route('admin.users.index') }}" method="GET" class="d-flex" style="max-width: 350px;">
+                <form action="{{ route('admin.users.index') }}" method="GET" class="w-100 w-md-auto" style="max-width: 350px;">
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0">
                             <i class="fa-solid fa-magnifying-glass text-muted"></i>
                         </span>
-                        <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm theo tên, email, vai trò..." value="{{ $search ?? '' }}">
+                        <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm theo tên, email..." value="{{ $search ?? '' }}">
                         @if($search)
                             <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary d-flex align-items-center">
                                 <i class="fa-solid fa-xmark"></i>
                             </a>
                         @endif
-                        <button type="submit" class="btn btn-primary">
-                            Tìm kiếm
+                        <button type="submit" class="btn btn-primary text-nowrap">
+                            <i class="fa-solid fa-magnifying-glass d-md-none"></i>
+                            <span class="d-none d-md-inline">Tìm kiếm</span>
                         </button>
                     </div>
                 </form>
@@ -88,8 +89,8 @@
                                             <form action="{{ route('admin.users.destroy', $u->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa thành viên {{ $u->name }} khỏi hệ thống? Hành động này không thể hoàn tác!');" class="d-inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-2">
-                                                    <i class="fa-solid fa-trash-can"></i> Xóa
+                                                <button type="submit" class="btn btn-outline-danger btn-sm rounded-2 text-nowrap">
+                                                    <i class="fa-solid fa-trash-can"></i> <span class="d-none d-md-inline">Xóa</span>
                                                 </button>
                                             </form>
                                         @else

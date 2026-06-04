@@ -4,7 +4,7 @@
 - Giao diện sử dụng **Bootstrap** - bộ công cụ thiết kế web của Twitter
 - Dữ liệu được lưu trong **MySQL** - hệ quản trị cơ sở dữ liệu
 - Chạy trên máy cá nhân thông qua **Laragon** hoặc lệnh `php artisan serve`
-
+withQueryString
 ---
 
 ## Cách cài đặt và chạy project

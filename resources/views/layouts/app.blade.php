@@ -73,6 +73,140 @@
             background-color: #f8f9fa;
             flex-grow: 1;
         }
+        @media (max-width: 991.98px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: -260px;
+                min-height: 100vh;
+                transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+                z-index: 1040;
+            }
+            .sidebar.show {
+                left: 0;
+            }
+            .sidebar-backdrop {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 1030;
+                display: none;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+            }
+            .sidebar-backdrop.show {
+                display: block;
+                opacity: 1;
+            }
+            .app-header {
+                padding: 15px 20px;
+            }
+        }
+
+        /* ========== RESPONSIVE TABLES ========== */
+        @media (max-width: 767.98px) {
+            .table-responsive {
+                -webkit-overflow-scrolling: touch;
+                margin: 0 -1px;
+            }
+            .table-responsive table {
+                min-width: 600px;
+            }
+            .app-content {
+                padding: 12px;
+            }
+            .card-body.p-0 {
+                overflow-x: auto;
+            }
+            /* Pagination responsive */
+            .card-footer .d-flex {
+                flex-direction: column !important;
+                gap: 10px;
+            }
+            .pagination {
+                font-size: 0.8rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* ========== FULLCALENDAR RESPONSIVE ========== */
+        @media (max-width: 767.98px) {
+            .fc .fc-toolbar {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+            .fc .fc-toolbar-title {
+                font-size: 1rem !important;
+                text-align: center !important;
+                order: 1;
+            }
+            .fc .fc-toolbar .fc-button-group {
+                order: 2;
+            }
+            .fc .fc-toolbar .fc-toolbar-chunk:first-child {
+                order: 2;
+            }
+            .fc .fc-toolbar .fc-toolbar-chunk:last-child {
+                order: 3;
+            }
+            .fc .fc-button {
+                padding: 0.3em 0.5em !important;
+                font-size: 0.75rem !important;
+            }
+            .fc .fc-button-group > .fc-button {
+                padding: 0.3em 0.45em !important;
+            }
+            .fc-daygrid-event {
+                font-size: 0.65rem !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+            .fc-col-header-cell {
+                font-size: 0.7rem !important;
+                padding: 4px 2px !important;
+            }
+            .fc .fc-daygrid-day-number {
+                font-size: 0.75rem !important;
+                padding: 4px !important;
+            }
+            .fc .fc-daygrid-day-frame {
+                min-height: 45px !important;
+            }
+            .fc .fc-scrollgrid-sync-table {
+                min-height: auto !important;
+            }
+        }
+
+        @media (max-width: 399.98px) {
+            .fc .fc-button {
+                padding: 0.25em 0.4em !important;
+                font-size: 0.7rem !important;
+            }
+            .fc .fc-toolbar-title {
+                font-size: 0.9rem !important;
+            }
+        }
+
+        /* ========== ADMIN TASKS STATS CARDS ========== */
+        @media (max-width: 575.98px) {
+            .stats-card-text {
+                font-size: 0.65rem !important;
+            }
+            .stats-card-number {
+                font-size: 1.3rem !important;
+            }
+            .table thead th {
+                font-size: 0.65rem !important;
+                white-space: nowrap;
+            }
+        }
     </style>
 </head>
 <body class="d-flex">
@@ -178,7 +312,12 @@
     <div class="main-container">
         <!-- Header -->
         <header class="app-header d-flex justify-content-between align-items-center">
-            <h4 class="mb-0 fw-bold text-dark">{{ $header ?? 'Dashboard' }}</h4>
+            <div class="d-flex align-items-center gap-3">
+                <button type="button" class="btn btn-link text-dark p-0 d-lg-none" id="sidebarToggle" aria-label="Toggle Navigation">
+                    <i class="fa-solid fa-bars fs-4"></i>
+                </button>
+                <h4 class="mb-0 fw-bold text-dark">{{ $header ?? 'Dashboard' }}</h4>
+            </div>
             <div class="d-flex align-items-center">
                 @if(auth()->user()->role !== 'admin')
                     <!-- Notifications quick view -->
@@ -215,7 +354,31 @@
         </main>
     </div>
 
+    <!-- Sidebar Backdrop for mobile -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
     <!-- Bootstrap 5 Bundle JS (Popper included) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+            if (sidebarToggle && sidebar && sidebarBackdrop) {
+                sidebarToggle.addEventListener('click', function () {
+                    sidebar.classList.add('show');
+                    sidebarBackdrop.classList.add('show');
+                });
+
+                sidebarBackdrop.addEventListener('click', function () {
+                    sidebar.classList.remove('show');
+                    sidebarBackdrop.classList.remove('show');
+                });
+            }
+        });
+    </script>
 </body>
 </html>

@@ -74,6 +74,11 @@
                                 @empty
                                     <div class="text-center text-muted small py-3">Không có task</div>
                                 @endforelse
+                                @if($pendingTasksList->hasPages())
+                                    <div class="mt-2 d-flex justify-content-center">
+                                        {{ $pendingTasksList->links('pagination::bootstrap-5') }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -96,6 +101,11 @@
                                 @empty
                                     <div class="text-center text-muted small py-3">Không có task</div>
                                 @endforelse
+                                @if($inProgressTasksList->hasPages())
+                                    <div class="mt-2 d-flex justify-content-center">
+                                        {{ $inProgressTasksList->links('pagination::bootstrap-5') }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -118,6 +128,11 @@
                                 @empty
                                     <div class="text-center text-muted small py-3">Không có task</div>
                                 @endforelse
+                                @if($completedTasksList->hasPages())
+                                    <div class="mt-2 d-flex justify-content-center">
+                                        {{ $completedTasksList->links('pagination::bootstrap-5') }}
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

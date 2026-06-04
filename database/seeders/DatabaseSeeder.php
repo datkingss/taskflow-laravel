@@ -204,6 +204,80 @@ class DatabaseSeeder extends Seeder
                 'due_date'    => '2026-05-29 09:00:00',
                 'assigned_to' => $toan->id,
             ],
+
+            // =============================================
+            // CÔNG VIỆC BỔ SUNG CHO NGUYEN VAN THANH (10 tasks)
+            // =============================================
+            [
+                'title'       => 'Hoàn thiện giao diện trang đăng nhập',
+                'description' => 'Chỉnh sửa form đăng nhập, màu sắc, khoảng cách và thông báo lỗi để giao diện dễ sử dụng hơn.',
+                'status'      => 'pending',
+                'due_date'    => '2026-06-13 09:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Kiểm tra validation form đăng ký',
+                'description' => 'Test các trường hợp nhập sai họ tên, email, mật khẩu và xác nhận mật khẩu trong form đăng ký.',
+                'status'      => 'pending',
+                'due_date'    => '2026-06-13 14:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Bổ sung nội dung README',
+                'description' => 'Cập nhật hướng dẫn cài đặt, tài khoản mẫu và mô tả chức năng chính trong file README.md.',
+                'status'      => 'in_progress',
+                'due_date'    => '2026-06-14 10:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Chụp ảnh màn hình chức năng chính',
+                'description' => 'Chụp ảnh các trang dashboard, task, admin user, admin task và report để đưa vào báo cáo.',
+                'status'      => 'pending',
+                'due_date'    => '2026-06-14 16:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Thiết kế sơ đồ ERD',
+                'description' => 'Vẽ sơ đồ quan hệ giữa các bảng users, tasks, teams, team_user và notifications.',
+                'status'      => 'pending',
+                'due_date'    => '2026-06-15 09:30:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Thiết kế UML Use Case',
+                'description' => 'Vẽ sơ đồ Use Case cho hai vai trò Admin và User trong hệ thống TaskFlow.',
+                'status'      => 'pending',
+                'due_date'    => '2026-06-15 15:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Kiểm tra phân quyền Admin User',
+                'description' => 'Đăng nhập bằng tài khoản admin và user để kiểm tra middleware phân quyền hoạt động đúng.',
+                'status'      => 'in_progress',
+                'due_date'    => '2026-06-16 11:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Kiểm tra tìm kiếm và phân trang',
+                'description' => 'Test chức năng tìm kiếm task, user, report và kiểm tra dữ liệu khi chuyển trang.',
+                'status'      => 'pending',
+                'due_date'    => '2026-06-16 17:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Sửa lỗi hiển thị tiếng Việt trong tài liệu',
+                'description' => 'Kiểm tra lại các file README và docs để đảm bảo nội dung tiếng Việt hiển thị đúng encoding UTF-8.',
+                'status'      => 'pending',
+                'due_date'    => '2026-06-17 10:00:00',
+                'assigned_to' => $thanh->id,
+            ],
+            [
+                'title'       => 'Chuẩn bị nội dung thuyết trình',
+                'description' => 'Tóm tắt chức năng chính, công nghệ sử dụng, Eloquent ORM, validation, middleware và phần demo.',
+                'status'      => 'completed',
+                'due_date'    => '2026-06-17 15:30:00',
+                'assigned_to' => $thanh->id,
+            ],
         ];
 
         foreach ($tasks as $task) {

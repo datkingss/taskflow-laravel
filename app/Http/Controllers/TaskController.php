@@ -44,7 +44,19 @@ class TaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|exists:users,id',
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
+
+        // Xử lý upload file đính kèm
+        $attachmentPath = null;
+        $attachmentName = null;
+        $attachmentType = null;
+        if ($request->hasFile('attachment')) {
+            $file = $request->file('attachment');
+            $attachmentPath = $file->store('task_attachments', 'public');
+            $attachmentName = $file->getClientOriginalName();
+            $attachmentType = $file->getClientMimeType();
+        }
 
         $task = Task::create([
             'title' => $validated['title'],
@@ -53,6 +65,9 @@ class TaskController extends Controller
             'due_date' => $validated['due_date'],
             'created_by' => Auth::id(),
             'assigned_to' => $validated['assigned_to'] ?? Auth::id(),
+            'attachment_path' => $attachmentPath,
+            'attachment_name' => $attachmentName,
+            'attachment_type' => $attachmentType,
         ]);
 
         Auth::user()->notify(new TaskActivityNotification($task, 'tạo mới'));
@@ -64,6 +79,9 @@ class TaskController extends Controller
     {
         // Kiểm tra quyền sở hữu công việc trước khi cho phép sửa
         if ($task->assigned_to !== Auth::id() && Auth::user()->role !== 'admin') {
+            if ($request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Bạn không được giao công việc này.'], 403);
+            }
             abort(403, 'Bạn không được giao công việc này.');
         }
 
@@ -79,6 +97,14 @@ class TaskController extends Controller
 
             Auth::user()->notify(new TaskActivityNotification($task, 'cập nhật trạng thái'));
 
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Đã cập nhật trạng thái công việc thành công!',
+                    'task' => $task->fresh()->load('creator', 'assignedUser'),
+                ]);
+            }
+
             return redirect()->back()->with('success', 'Đã cập nhật trạng thái công việc thành công!');
         }
 
@@ -89,13 +115,50 @@ class TaskController extends Controller
             'status' => 'required|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
             'assigned_to' => 'nullable|exists:users,id',
+            'attachment' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
 
-        $task->update($validated);
+        // Xử lý upload file đính kèm (nếu có file mới)
+        $updateData = $validated;
+        if ($request->hasFile('attachment')) {
+            // Xóa file cũ nếu có
+            if ($task->attachment_path && \Storage::disk('public')->exists($task->attachment_path)) {
+                \Storage::disk('public')->delete($task->attachment_path);
+            }
+            $file = $request->file('attachment');
+            $updateData['attachment_path'] = $file->store('task_attachments', 'public');
+            $updateData['attachment_name'] = $file->getClientOriginalName();
+            $updateData['attachment_type'] = $file->getClientMimeType();
+        }
+
+        $task->update($updateData);
 
         Auth::user()->notify(new TaskActivityNotification($task, 'cập nhật'));
 
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Đã cập nhật công việc thành công!',
+                'task' => $task->fresh()->load('creator', 'assignedUser'),
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Đã cập nhật công việc thành công!');
+    }
+
+    /**
+     * Tải file đính kèm của task
+     */
+    public function download(Task $task)
+    {
+        if (!$task->attachment_path || !\Storage::disk('public')->exists($task->attachment_path)) {
+            abort(404, 'File không tồn tại hoặc đã bị xóa.');
+        }
+
+        return \Storage::disk('public')->download(
+            $task->attachment_path,
+            $task->attachment_name ?? basename($task->attachment_path)
+        );
     }
 
     public function destroy(Task $task)

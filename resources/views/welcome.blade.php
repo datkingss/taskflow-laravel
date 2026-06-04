@@ -44,6 +44,23 @@
             font-size: 1.25rem;
             margin-bottom: 20px;
         }
+        @media (max-width: 575.98px) {
+            .navbar-brand {
+                font-size: 1.25rem !important;
+            }
+            .navbar-brand div {
+                width: 28px !important;
+                height: 28px !important;
+                margin-right: 0.5rem !important;
+            }
+            .navbar-brand div i {
+                font-size: 0.8rem !important;
+            }
+            .navbar .btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
     </style>
 </head>
 <body>

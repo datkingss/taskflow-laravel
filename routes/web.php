@@ -22,6 +22,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    // Route download file - cho phép cả Admin và User thường
+    Route::get('/tasks/{task}/download', [TaskController::class, 'download'])->name('tasks.download');
+
     // Nhóm các routes của User thường cần kiểm tra và chuyển hướng Admin
     Route::middleware('redirect.admin')->group(function () {
         Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');

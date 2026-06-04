@@ -29,10 +29,10 @@ class DashboardController extends Controller
         $inProgressPercent = $totalTasks > 0 ? round(($inProgressTasks / $totalTasks) * 100, 1) : 0;
         $completedPercent = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100, 1) : 0;
 
-        // Lấy danh sách task cho bảng Kanban (chỉ lấy 2 task mới nhất cho đẹp giao diện)
-        $pendingTasksList = Task::where('assigned_to', $userId)->where('status', 'pending')->latest()->take(2)->get();
-        $inProgressTasksList = Task::where('assigned_to', $userId)->where('status', 'in_progress')->latest()->take(2)->get();
-        $completedTasksList = Task::where('assigned_to', $userId)->where('status', 'completed')->latest()->take(2)->get();
+        // Lấy danh sách task cho bảng Kanban (phân trang 5 task/trang, pagination độc lập từng cột)
+        $pendingTasksList = Task::where('assigned_to', $userId)->where('status', 'pending')->latest()->paginate(5, ['*'], 'pending_page')->withQueryString();
+        $inProgressTasksList = Task::where('assigned_to', $userId)->where('status', 'in_progress')->latest()->paginate(5, ['*'], 'inprogress_page')->withQueryString();
+        $completedTasksList = Task::where('assigned_to', $userId)->where('status', 'completed')->latest()->paginate(5, ['*'], 'completed_page')->withQueryString();
 
         // ==========================================
         // 3. DỮ LIỆU MỚI CHO BIỂU ĐỒ (CHART.JS)

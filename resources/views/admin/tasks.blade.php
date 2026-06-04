@@ -10,74 +10,74 @@
 
     <div class="container-fluid">
         <!-- Stats Row -->
-        <div class="row g-3 mb-4">
+        <div class="row g-2 g-md-3 mb-4">
             <!-- Total Tasks -->
-            <div class="col-12 col-sm-6 col-md-4 col-xl-2.4 flex-fill">
+            <div class="col-6 col-sm-4 col-md">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Tổng số task</span>
-                            <div class="bg-primary-subtle text-primary rounded p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <span class="text-muted text-uppercase fw-semibold stats-card-text" style="font-size: 0.7rem; letter-spacing: 0.05em;">Tổng số task</span>
+                            <div class="bg-primary-subtle text-primary rounded p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
                                 <i class="fa-solid fa-list-check"></i>
                             </div>
                         </div>
-                        <h3 class="mb-0 fw-bold text-dark">{{ $stats['total'] }}</h3>
+                        <h3 class="mb-0 fw-bold text-dark stats-card-number">{{ $stats['total'] }}</h3>
                     </div>
                 </div>
             </div>
             <!-- Pending -->
-            <div class="col-12 col-sm-6 col-md-4 col-xl-2.4 flex-fill">
+            <div class="col-6 col-sm-4 col-md">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Chờ xử lý</span>
-                            <div class="bg-secondary-subtle text-secondary rounded p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <span class="text-muted text-uppercase fw-semibold stats-card-text" style="font-size: 0.7rem; letter-spacing: 0.05em;">Chờ xử lý</span>
+                            <div class="bg-secondary-subtle text-secondary rounded p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
                                 <i class="fa-regular fa-clock"></i>
                             </div>
                         </div>
-                        <h3 class="mb-0 fw-bold text-secondary">{{ $stats['pending'] }}</h3>
+                        <h3 class="mb-0 fw-bold text-secondary stats-card-number">{{ $stats['pending'] }}</h3>
                     </div>
                 </div>
             </div>
             <!-- In Progress -->
-            <div class="col-12 col-sm-6 col-md-4 col-xl-2.4 flex-fill">
+            <div class="col-6 col-sm-4 col-md">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Đang làm</span>
-                            <div class="bg-warning-subtle text-warning-emphasis rounded p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <span class="text-muted text-uppercase fw-semibold stats-card-text" style="font-size: 0.7rem; letter-spacing: 0.05em;">Đang làm</span>
+                            <div class="bg-warning-subtle text-warning-emphasis rounded p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
                                 <i class="fa-solid fa-spinner"></i>
                             </div>
                         </div>
-                        <h3 class="mb-0 fw-bold text-warning-emphasis">{{ $stats['in_progress'] }}</h3>
+                        <h3 class="mb-0 fw-bold text-warning-emphasis stats-card-number">{{ $stats['in_progress'] }}</h3>
                     </div>
                 </div>
             </div>
             <!-- Completed -->
-            <div class="col-12 col-sm-6 col-md-4 col-xl-2.4 flex-fill">
+            <div class="col-6 col-sm-4 col-md">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Hoàn thành</span>
-                            <div class="bg-success-subtle text-success rounded p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <span class="text-muted text-uppercase fw-semibold stats-card-text" style="font-size: 0.7rem; letter-spacing: 0.05em;">Hoàn thành</span>
+                            <div class="bg-success-subtle text-success rounded p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
                                 <i class="fa-solid fa-circle-check"></i>
                             </div>
                         </div>
-                        <h3 class="mb-0 fw-bold text-success">{{ $stats['completed'] }}</h3>
+                        <h3 class="mb-0 fw-bold text-success stats-card-number">{{ $stats['completed'] }}</h3>
                     </div>
                 </div>
             </div>
             <!-- Overdue -->
-            <div class="col-12 col-sm-6 col-md-4 col-xl-2.4 flex-fill">
+            <div class="col-6 col-sm-4 col-md">
                 <div class="card shadow-sm border-0 rounded-3 h-100 bg-white">
-                    <div class="card-body p-3">
+                    <div class="card-body p-2 p-md-3">
                         <div class="d-flex align-items-center justify-content-between mb-2">
-                            <span class="text-muted text-uppercase fw-semibold" style="font-size: 0.7rem; letter-spacing: 0.05em;">Quá hạn</span>
-                            <div class="bg-danger-subtle text-danger rounded p-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                            <span class="text-muted text-uppercase fw-semibold stats-card-text" style="font-size: 0.7rem; letter-spacing: 0.05em;">Quá hạn</span>
+                            <div class="bg-danger-subtle text-danger rounded p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 32px; height: 32px;">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                             </div>
                         </div>
-                        <h3 class="mb-0 fw-bold text-danger">{{ $stats['overdue'] }}</h3>
+                        <h3 class="mb-0 fw-bold text-danger stats-card-number">{{ $stats['overdue'] }}</h3>
                     </div>
                 </div>
             </div>
@@ -86,17 +86,17 @@
         <!-- Filter & Table Card -->
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header bg-white py-3">
-                <form action="{{ route('admin.tasks.index') }}" method="GET" class="row g-2 align-items-center">
-                    <div class="col-12 col-md-4">
+                <form action="{{ route('admin.tasks.index') }}" method="GET" class="row g-2 align-items-end">
+                    <div class="col-12 col-sm-6 col-md-3">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0">
                                 <i class="fa-solid fa-magnifying-glass text-muted"></i>
                             </span>
-                            <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm theo tiêu đề, email, tên..." value="{{ $search ?? '' }}">
+                            <input type="text" name="search" class="form-control bg-light border-start-0 ps-0" placeholder="Tìm tiêu đề, email, tên..." value="{{ $search ?? '' }}">
                         </div>
                     </div>
                     
-                    <div class="col-6 col-md-2">
+                    <div class="col-6 col-sm-3 col-md-2">
                         <select name="status" class="form-select bg-light">
                             <option value="">-- Trạng thái --</option>
                             <option value="pending" {{ isset($status) && $status == 'pending' ? 'selected' : '' }}>Chờ xử lý</option>
@@ -105,19 +105,19 @@
                         </select>
                     </div>
 
-                    <div class="col-6 col-md-2">
+                    <div class="col-6 col-sm-3 col-md-2">
                         <select name="filter" class="form-select bg-light">
                             <option value="">-- Hạn chót --</option>
                             <option value="overdue" {{ isset($filter) && $filter == 'overdue' ? 'selected' : '' }}>Đã quá hạn</option>
                         </select>
                     </div>
 
-                    <div class="col-12 col-md-4 d-flex gap-2">
-                        <button type="submit" class="btn btn-primary flex-grow-1">
-                            Lọc dữ liệu
+                    <div class="col-12 col-sm-6 col-md-5 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary text-nowrap">
+                            <i class="fa-solid fa-filter me-1"></i> Lọc
                         </button>
                         @if($search || $status || $filter)
-                            <a href="{{ route('admin.tasks.index') }}" class="btn btn-outline-secondary">
+                            <a href="{{ route('admin.tasks.index') }}" class="btn btn-outline-secondary text-nowrap">
                                 <i class="fa-solid fa-arrows-rotate"></i> Reset
                             </a>
                         @endif
@@ -152,6 +152,8 @@
                                                data-due="{{ $t->due_date ? $t->due_date->format('d/m/Y H:i') : 'Không giới hạn' }}"
                                                data-creator="{{ $t->creator ? $t->creator->name : 'Không rõ' }}"
                                                data-assigned="{{ $t->assignedUser ? $t->assignedUser->name . ' (' . $t->assignedUser->email . ')' : 'Chưa phân công' }}"
+                                               data-attachment-name="{{ $t->attachment_name ?? '' }}"
+                                               data-task-id="{{ $t->id }}"
                                                class="fw-semibold text-primary text-decoration-none d-block text-truncate">
                                                 {{ $t->title }}
                                             </a>
@@ -202,16 +204,16 @@
                                     <td>
                                         <span class="small text-muted">{{ $t->creator ? $t->creator->name : 'N/A' }}</span>
                                     </td>
-                                    <td class="px-4 text-end">
+                                    <td class="px-4 text-end text-nowrap">
                                         <button type="button" class="btn btn-outline-primary btn-sm rounded-2 me-1"
                                                 onclick="openAdminEditModal({{ json_encode($t) }})">
-                                            <i class="fa-solid fa-pen-to-square me-1"></i> Sửa
+                                            <i class="fa-solid fa-pen-to-square"></i> <span class="d-none d-md-inline">Sửa</span>
                                         </button>
                                         <form action="{{ route('admin.tasks.destroy', $t->id) }}" method="POST" onsubmit="return confirm('Bạn có chắc chắn muốn xóa vĩnh viễn công việc này khỏi hệ thống? Hành động này không thể hoàn tác!');" class="d-inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-outline-danger btn-sm rounded-2">
-                                                <i class="fa-solid fa-trash-can me-1"></i> Xóa
+                                                <i class="fa-solid fa-trash-can"></i> <span class="d-none d-md-inline">Xóa</span>
                                             </button>
                                         </form>
                                     </td>
@@ -275,6 +277,12 @@
                             <div class="fw-bold text-dark" id="modal-task-assigned">Tên người nhận (Email)</div>
                         </div>
                     </div>
+                    <div class="mt-3" id="modal-attachment-section" style="display:none;">
+                        <label class="form-label text-muted fw-semibold small uppercase mb-0">File đính kèm</label>
+                        <a href="#" id="modal-attachment-link" class="btn btn-outline-primary btn-sm mt-1" target="_blank">
+                            <i class="fa-solid fa-download me-1"></i> <span id="modal-attachment-name"></span>
+                        </a>
+                    </div>
                 </div>
                 <div class="modal-footer border-0 pt-0">
                     <button type="button" class="btn btn-secondary w-100 py-2 rounded-2" data-bs-dismiss="modal">Đóng cửa sổ</button>
@@ -296,12 +304,26 @@
                     const due = button.getAttribute('data-due');
                     const creator = button.getAttribute('data-creator');
                     const assigned = button.getAttribute('data-assigned');
+                    const attachmentName = button.getAttribute('data-attachment-name');
+                    const taskId = button.getAttribute('data-task-id');
                     
                     taskDetailModal.querySelector('#modal-task-title').textContent = title;
                     taskDetailModal.querySelector('#modal-task-desc').textContent = description;
                     taskDetailModal.querySelector('#modal-task-due').textContent = due;
                     taskDetailModal.querySelector('#modal-task-creator').textContent = creator;
                     taskDetailModal.querySelector('#modal-task-assigned').textContent = assigned;
+                    
+                    // Hiển thị file đính kèm (nếu có)
+                    const attachSection = taskDetailModal.querySelector('#modal-attachment-section');
+                    const attachLink = taskDetailModal.querySelector('#modal-attachment-link');
+                    const attachName = taskDetailModal.querySelector('#modal-attachment-name');
+                    if (attachmentName && attachmentName.trim() !== '') {
+                        attachSection.style.display = 'block';
+                        attachLink.href = '/tasks/' + taskId + '/download';
+                        attachName.textContent = attachmentName;
+                    } else {
+                        attachSection.style.display = 'none';
+                    }
                     
                     // Style status badge inside modal
                     const badge = taskDetailModal.querySelector('#modal-task-status');
@@ -332,6 +354,15 @@
             } else {
                 document.getElementById('admin_edit_due_date').value = '';
             }
+            // Hiển thị file đính kèm hiện tại
+            const attachDiv = document.getElementById('adminCurrentAttachment');
+            if (attachDiv) {
+                if (task.attachment_name) {
+                    attachDiv.innerHTML = '<i class="fa-solid fa-paperclip me-1"></i> File hiện tại: <a href="/tasks/' + task.id + '/download" class="text-primary fw-semibold">' + task.attachment_name + '</a>';
+                } else {
+                    attachDiv.innerHTML = '';
+                }
+            }
             const editModal = new bootstrap.Modal(document.getElementById('adminEditTaskModal'));
             editModal.show();
         }
@@ -340,7 +371,7 @@
     <!-- Admin Create Task Modal -->
     <div class="modal fade" id="adminCreateTaskModal" tabindex="-1" aria-labelledby="adminCreateTaskModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form method="POST" action="{{ route('admin.tasks.store') }}">
+            <form method="POST" action="{{ route('admin.tasks.store') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-content border-0 shadow">
                     <div class="modal-header bg-light">
@@ -379,6 +410,10 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="mb-3">
+                            <label for="admin_attachment" class="form-label fw-semibold small text-muted">File đính kèm (PDF, DOCX, JPG, PNG - tối đa 2MB)</label>
+                            <input type="file" id="admin_attachment" name="attachment" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                        </div>
                     </div>
                     <div class="modal-footer bg-light border-0">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
@@ -392,7 +427,7 @@
     <!-- Admin Edit Task Modal -->
     <div class="modal fade" id="adminEditTaskModal" tabindex="-1" aria-labelledby="adminEditTaskModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form id="adminEditTaskForm" method="POST">
+            <form id="adminEditTaskForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="modal-content border-0 shadow">
@@ -431,6 +466,11 @@
                                     <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->email }})</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="admin_edit_attachment" class="form-label fw-semibold small text-muted">File đính kèm (PDF, DOCX, JPG, PNG - tối đa 2MB)</label>
+                            <input type="file" id="admin_edit_attachment" name="attachment" class="form-control" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                            <div id="adminCurrentAttachment" class="mt-2 small text-muted"></div>
                         </div>
                     </div>
                     <div class="modal-footer bg-light border-0">
